@@ -1,0 +1,13 @@
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:151:30:lr1121_modem_regmem_write_regmem32	304	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:169:30:lr1121_modem_regmem_read_regmem32	40	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:194:30:lr1121_modem_regmem_write_mem8	40	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:205:30:lr1121_modem_regmem_read_mem8	40	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:217:30:lr1121_modem_regmem_write_buffer8	40	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:229:30:lr1121_modem_regmem_read_buffer8	40	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:243:30:lr1121_modem_regmem_clear_rxbuffer	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:254:30:lr1121_modem_regmem_write_regmem32_mask	48	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:280:6:lr1121_modem_regmem_fill_cbuffer_opcode_address	24	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:291:6:lr1121_modem_regmem_fill_cbuffer_opcode_address_length	24	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:298:6:lr1121_modem_regmem_fill_cdata	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:311:6:lr1121_modem_regmem_fill_cbuffer_cdata_opcode_address_data	24	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_regmem.c:319:6:lr1121_modem_regmem_fill_out_buffer_from_raw_buffer	32	static

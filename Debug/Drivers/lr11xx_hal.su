@@ -1,0 +1,7 @@
+../Drivers/lr11xx_hal.c:21:21:lr11xx_hal_write	24	static
+../Drivers/lr11xx_hal.c:40:21:lr11xx_hal_read	24	static
+../Drivers/lr11xx_hal.c:60:21:lr11xx_hal_reset	16	static
+../Drivers/lr11xx_hal.c:72:21:lr11xx_hal_wakeup	16	static
+../Drivers/lr11xx_hal.c:117:23:smtc_hal_mcu_gpio_set_state	16	static
+../Drivers/lr11xx_hal.c:146:23:smtc_hal_mcu_gpio_get_state	16	static
+../Drivers/lr11xx_hal.c:177:17:lr11xx_system_get_version	32	static

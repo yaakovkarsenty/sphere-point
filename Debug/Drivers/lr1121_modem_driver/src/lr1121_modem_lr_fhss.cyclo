@@ -1,0 +1,6 @@
+../Drivers/lr1121_modem_driver/src/lr1121_modem_lr_fhss.c:111:30:lr1121_modem_lr_fhss_init	2
+../Drivers/lr1121_modem_driver/src/lr1121_modem_lr_fhss.c:130:10:lr1121_modem_lr_fhss_get_bit_delay_in_us	1
+../Drivers/lr1121_modem_driver/src/lr1121_modem_lr_fhss.c:140:30:lr1121_modem_lr_fhss_build_frame	3
+../Drivers/lr1121_modem_driver/src/lr1121_modem_lr_fhss.c:173:10:lr1121_modem_lr_fhss_get_time_on_air_in_ms	1
+../Drivers/lr1121_modem_driver/src/lr1121_modem_lr_fhss.c:180:14:lr1121_modem_lr_fhss_get_hop_sequence_count	4
+../Drivers/lr1121_modem_driver/src/lr1121_modem_lr_fhss.c:196:10:lr1121_modem_lr_fhss_get_nb_bits	6

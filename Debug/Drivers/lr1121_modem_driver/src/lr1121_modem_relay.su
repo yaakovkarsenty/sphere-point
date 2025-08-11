@@ -1,0 +1,3 @@
+../Drivers/lr1121_modem_driver/src/lr1121_modem_relay.c:91:30:lr1121_modem_relay_get_tx_config	48	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_relay.c:121:30:lr1121_modem_relay_set_tx_config	48	static
+../Drivers/lr1121_modem_driver/src/lr1121_modem_relay.c:153:10:lr1121_uint8_to_uint32	16	static

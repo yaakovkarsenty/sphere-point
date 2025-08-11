@@ -1,0 +1,11 @@
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:111:17:lr1121_bootloader_get_status	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:137:17:lr1121_bootloader_clear_reset_status_info	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:147:17:lr1121_bootloader_get_version	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:168:17:lr1121_bootloader_erase_flash	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:178:17:lr1121_bootloader_write_flash_encrypted	312	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:205:17:lr1121_bootloader_write_flash_encrypted_full	48	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:234:17:lr1121_bootloader_reboot	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:245:17:lr1121_bootloader_read_pin	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:256:17:lr1121_bootloader_read_chip_eui	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:267:17:lr1121_bootloader_read_join_eui	32	static
+../Drivers/lr1121_modem_driver/src/lr1121_bootloader.c:283:9:lr1121_bootloader_get_min_from_operand_and_max_block_size	16	static

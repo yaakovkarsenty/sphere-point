@@ -1,0 +1,5 @@
+../Drivers/lr1121_modem_driver/src/lr1121_modem_radio_timings.c:113:10:lr1121_modem_radio_timings_get_delay_between_last_bit_sent_and_rx_done_in_us	1
+../Drivers/lr1121_modem_driver/src/lr1121_modem_radio_timings.c:121:10:lr1121_modem_radio_timings_get_delay_between_last_bit_sent_and_tx_done_in_us	1
+../Drivers/lr1121_modem_driver/src/lr1121_modem_radio_timings.c:132:17:lr1121_modem_radio_timings_get_pa_ramp_time_in_us	17
+../Drivers/lr1121_modem_driver/src/lr1121_modem_radio_timings.c:205:17:lr1121_modem_radio_timings_get_lora_rx_input_delay_in_us	5
+../Drivers/lr1121_modem_driver/src/lr1121_modem_radio_timings.c:228:17:lr1121_modem_radio_timings_get_lora_symb_time_in_us	1

@@ -1,0 +1,14 @@
+C:/Users/Admin/work/test77/lr11xx_ranging_demo/lr11xx/common/apps_common.h:200:23:apps_common_compute_lora_ldro	16	static
+C:/Users/Admin/work/test77/lr11xx_ranging_demo/lr11xx/lr11xx_driver/src/lr11xx_rttof.h:189:22:lr11xx_rttof_rssi_raw_to_value	16	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:246:6:app_radio_ranging_params_init	24	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:316:6:app_radio_ranging_setup	16	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:341:22:app_radio_ranging_run	56	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:642:26:app_ranging_get_result	8	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:651:28:app_ranging_get_radio_settings	4	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:656:6:app_ranging_params_reset	4	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:667:10:get_ranging_hopping_channels	16	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:676:6:set_ranging_process_state	16	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:681:6:ranging_process_is_running	4	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:695:24:get_ranging_result	32	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:722:13:ranging_handle_distance_result	224	static
+../lr11xx_ranging_demo/lr11xx/apps/ranging_demo/ranging_hopping_frequency/app_ranging_hopping.c:781:14:get_single_symbol_time_ms	24	static
