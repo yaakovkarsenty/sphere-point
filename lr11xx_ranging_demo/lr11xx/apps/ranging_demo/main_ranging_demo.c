@@ -121,6 +121,7 @@ int main_ranging_demo( void )
         display_string_printf( 0, 0, DISPLAY_WHITE, "Ranging Demo - Manager" );
     else
         display_string_printf( 0, 0, DISPLAY_WHITE, "Ranging Demo - Subordinate" );
+    printf("\r\n");
     display_string_printf( 0, 16, DISPLAY_WHITE, "==========================" );
     display_string_printf( 0, 48, DISPLAY_WHITE, "  Ranging ..." );
     display_string_printf( 0, 192, DISPLAY_WHITE, "SF: %s", lr11xx_radio_lora_sf_to_str( LORA_SPREADING_FACTOR ) );

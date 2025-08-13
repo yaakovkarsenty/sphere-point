@@ -370,7 +370,11 @@ app_running_status_t app_radio_ranging_run( const void* context, const bool is_m
 
             // send LoRa packet
             lr11xx_regmem_write_buffer8( context, radio_pl_buffer, PAYLOAD_LENGTH );
-            lr11xx_radio_set_tx( context, 0 );
+//            while (1)
+//            {
+            	lr11xx_radio_set_tx( context, 0 );
+//           	    HAL_Delay(1000);
+//            }
         }
         else  // subordinate
         {
@@ -630,6 +634,15 @@ app_running_status_t app_radio_ranging_run( const void* context, const bool is_m
         if( ( app_soft_timer_is_expired( &sub_ranging_rx_timeout_timer ) == true ) && ( !is_manager ) )
         {
             ranging_internal_state = APP_RADIO_RANGING_TIMEOUT;
+        }
+        if (is_manager)
+        {
+            lr11xx_regmem_write_buffer8( context, radio_pl_buffer, PAYLOAD_LENGTH );
+//            while (1)
+//            {
+            	lr11xx_radio_set_tx( context, 0 );
+//           	    HAL_Delay(1000);
+
         }
         break;
     }

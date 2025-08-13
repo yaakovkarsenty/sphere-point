@@ -205,6 +205,11 @@ static struct
 /*!
  * @brief Print the common configuration on the debug interface
  */
+__STATIC_INLINE void LL_SYSCFG_SetEXTISource(uint32_t Port, uint32_t Line)
+{
+  MODIFY_REG(SYSCFG->EXTICR[Line & 0xFFU], (Line >> 16U), Port << POSITION_VAL((Line >> 16U)));
+}
+
 void print_common_configuration( void );
 
 /*!
@@ -371,6 +376,376 @@ __STATIC_INLINE void LL_AHB2_GRP1_EnableClock(uint32_t Periphs)
   (void)tmpreg;
 }
 
+#define SMTC_HAL_MCU_SPI_STM32L4_N_INSTANCES_MAX 4
+
+/**
+ * @brief Structure defining a SPI instance
+ */
+struct smtc_hal_mcu_spi_inst_s
+{
+    bool         is_cfged;
+    SPI_TypeDef* spi;
+};
+
+static struct smtc_hal_mcu_spi_inst_s spi_inst_array[SMTC_HAL_MCU_SPI_STM32L4_N_INSTANCES_MAX];
+
+static struct smtc_hal_mcu_spi_inst_s* smtc_hal_mcu_spi_stm32l4_get_free_slot( void )
+{
+    for( int i = 0; i < SMTC_HAL_MCU_SPI_STM32L4_N_INSTANCES_MAX; i++ )
+    {
+        if( spi_inst_array[i].is_cfged == false )
+        {
+            return &spi_inst_array[i];
+        }
+    }
+
+    return NULL;
+}
+
+__STATIC_INLINE void LL_APB2_GRP1_EnableClock(uint32_t Periphs)
+{
+  __IO uint32_t tmpreg;
+  SET_BIT(RCC->APB2ENR, Periphs);
+  /* Delay after an RCC peripheral clock enabling */
+  tmpreg = READ_BIT(RCC->APB2ENR, Periphs);
+  (void)tmpreg;
+}
+
+#define LL_APB2_GRP1_PERIPH_ALL            0xFFFFFFFFU
+#define LL_APB2_GRP1_PERIPH_SYSCFG         RCC_APB2ENR_SYSCFGEN
+#define LL_APB2_GRP1_PERIPH_FW             RCC_APB2ENR_FWEN
+#define LL_APB2_GRP1_PERIPH_SDMMC1         RCC_APB2ENR_SDMMC1EN
+#define LL_APB2_GRP1_PERIPH_TIM1           RCC_APB2ENR_TIM1EN
+#define LL_APB2_GRP1_PERIPH_SPI1           RCC_APB2ENR_SPI1EN
+#define LL_APB2_GRP1_PERIPH_TIM8           RCC_APB2ENR_TIM8EN
+#define LL_APB2_GRP1_PERIPH_USART1         RCC_APB2ENR_USART1EN
+#define LL_APB2_GRP1_PERIPH_TIM15          RCC_APB2ENR_TIM15EN
+#define LL_APB2_GRP1_PERIPH_TIM16          RCC_APB2ENR_TIM16EN
+#define LL_APB2_GRP1_PERIPH_TIM17          RCC_APB2ENR_TIM17EN
+#define LL_APB2_GRP1_PERIPH_SAI1           RCC_APB2ENR_SAI1EN
+#define LL_APB2_GRP1_PERIPH_SAI2           RCC_APB2ENR_SAI2EN
+#define LL_APB2_GRP1_PERIPH_DFSDM1         RCC_APB2ENR_DFSDM1EN
+#define LL_APB2_GRP1_PERIPH_LTDC           RCC_APB2ENR_LTDCEN
+#define LL_APB2_GRP1_PERIPH_DSI            RCC_APB2ENR_DSIEN
+
+/**
+  * @brief  Initialize GPIO registers according to the specified parameters in GPIO_InitStruct.
+  * @param  GPIOx GPIO Port
+  * @param GPIO_InitStruct pointer to a @ref LL_GPIO_InitTypeDef structure
+  *         that contains the configuration information for the specified GPIO peripheral.
+  * @retval An ErrorStatus enumeration value:
+  *          - SUCCESS: GPIO registers are initialized according to GPIO_InitStruct content
+  *          - ERROR:   Not applicable
+  */
+ErrorStatus LL_GPIO_Init(GPIO_TypeDef *GPIOx, LL_GPIO_InitTypeDef *GPIO_InitStruct)
+{
+  uint32_t pinpos;
+  uint32_t currentpin;
+
+  /* Check the parameters */
+  assert_param(IS_GPIO_ALL_INSTANCE(GPIOx));
+  assert_param(IS_LL_GPIO_PIN(GPIO_InitStruct->Pin));
+  assert_param(IS_LL_GPIO_MODE(GPIO_InitStruct->Mode));
+  assert_param(IS_LL_GPIO_PULL(GPIO_InitStruct->Pull));
+
+  /* ------------------------- Configure the port pins ---------------- */
+  /* Initialize  pinpos on first pin set */
+  pinpos = POSITION_VAL(GPIO_InitStruct->Pin);
+
+  /* Configure the port pins */
+  while (((GPIO_InitStruct->Pin) >> pinpos) != 0x00u)
+  {
+    /* Get current io position */
+    currentpin = (GPIO_InitStruct->Pin) & (0x00000001uL << pinpos);
+
+    if (currentpin != 0x00u)
+    {
+      if ((GPIO_InitStruct->Mode == LL_GPIO_MODE_OUTPUT) || (GPIO_InitStruct->Mode == LL_GPIO_MODE_ALTERNATE))
+      {
+        /* Check Speed mode parameters */
+        assert_param(IS_LL_GPIO_SPEED(GPIO_InitStruct->Speed));
+
+        /* Speed mode configuration */
+        LL_GPIO_SetPinSpeed(GPIOx, currentpin, GPIO_InitStruct->Speed);
+
+        /* Check Output mode parameters */
+        assert_param(IS_LL_GPIO_OUTPUT_TYPE(GPIO_InitStruct->OutputType));
+
+        /* Output mode configuration*/
+        LL_GPIO_SetPinOutputType(GPIOx, GPIO_InitStruct->Pin, GPIO_InitStruct->OutputType);
+      }
+
+      /* Pull-up Pull down resistor configuration*/
+      LL_GPIO_SetPinPull(GPIOx, currentpin, GPIO_InitStruct->Pull);
+
+      if (GPIO_InitStruct->Mode == LL_GPIO_MODE_ALTERNATE)
+      {
+        /* Check Alternate parameter */
+        assert_param(IS_LL_GPIO_ALTERNATE(GPIO_InitStruct->Alternate));
+
+        /* Speed mode configuration */
+        if (currentpin < LL_GPIO_PIN_8)
+        {
+          LL_GPIO_SetAFPin_0_7(GPIOx, currentpin, GPIO_InitStruct->Alternate);
+        }
+        else
+        {
+          LL_GPIO_SetAFPin_8_15(GPIOx, currentpin, GPIO_InitStruct->Alternate);
+        }
+      }
+
+      /* Pin Mode configuration */
+      LL_GPIO_SetPinMode(GPIOx, currentpin, GPIO_InitStruct->Mode);
+    }
+    pinpos++;
+  }
+
+  return (SUCCESS);
+}
+
+__STATIC_INLINE void LL_APB1_GRP1_EnableClock(uint32_t Periphs)
+{
+  __IO uint32_t tmpreg;
+  SET_BIT(RCC->APB1ENR1, Periphs);
+  /* Delay after an RCC peripheral clock enabling */
+  tmpreg = READ_BIT(RCC->APB1ENR1, Periphs);
+  (void)tmpreg;
+}
+
+#define LL_APB1_GRP1_PERIPH_SPI3           RCC_APB1ENR1_SPI3EN
+
+/**
+  * @brief  SPI Init structures definition
+  */
+typedef struct
+{
+  uint32_t TransferDirection;       /*!< Specifies the SPI unidirectional or bidirectional data mode.
+                                         This parameter can be a value of @ref SPI_LL_EC_TRANSFER_MODE.
+
+                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetTransferDirection().*/
+
+  uint32_t Mode;                    /*!< Specifies the SPI mode (Master/Slave).
+                                         This parameter can be a value of @ref SPI_LL_EC_MODE.
+
+                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetMode().*/
+
+  uint32_t DataWidth;               /*!< Specifies the SPI data width.
+                                         This parameter can be a value of @ref SPI_LL_EC_DATAWIDTH.
+
+                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetDataWidth().*/
+
+  uint32_t ClockPolarity;           /*!< Specifies the serial clock steady state.
+                                         This parameter can be a value of @ref SPI_LL_EC_POLARITY.
+
+                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetClockPolarity().*/
+
+  uint32_t ClockPhase;              /*!< Specifies the clock active edge for the bit capture.
+                                         This parameter can be a value of @ref SPI_LL_EC_PHASE.
+
+                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetClockPhase().*/
+
+  uint32_t NSS;                     /*!< Specifies whether the NSS signal is managed by hardware (NSS pin) or by software using the SSI bit.
+                                         This parameter can be a value of @ref SPI_LL_EC_NSS_MODE.
+
+                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetNSSMode().*/
+
+  uint32_t BaudRate;                /*!< Specifies the BaudRate prescaler value which will be used to configure the transmit and receive SCK clock.
+                                         This parameter can be a value of @ref SPI_LL_EC_BAUDRATEPRESCALER.
+                                         @note The communication clock is derived from the master clock. The slave clock does not need to be set.
+
+                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetBaudRatePrescaler().*/
+
+  uint32_t BitOrder;                /*!< Specifies whether data transfers start from MSB or LSB bit.
+                                         This parameter can be a value of @ref SPI_LL_EC_BIT_ORDER.
+
+                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetTransferBitOrder().*/
+
+  uint32_t CRCCalculation;          /*!< Specifies if the CRC calculation is enabled or not.
+                                         This parameter can be a value of @ref SPI_LL_EC_CRC_CALCULATION.
+
+                                         This feature can be modified afterwards using unitary functions @ref LL_SPI_EnableCRC() and @ref LL_SPI_DisableCRC().*/
+
+  uint32_t CRCPoly;                 /*!< Specifies the polynomial used for the CRC calculation.
+                                         This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFFFF.
+
+                                         This feature can be modified afterwards using unitary function @ref LL_SPI_SetCRCPolynomial().*/
+
+} LL_SPI_InitTypeDef;
+
+
+/* SPI registers Masks */
+#define SPI_CR1_CLEAR_MASK                 (SPI_CR1_CPHA    | SPI_CR1_CPOL     | SPI_CR1_MSTR   | \
+                                            SPI_CR1_BR      | SPI_CR1_LSBFIRST | SPI_CR1_SSI    | \
+                                            SPI_CR1_SSM     | SPI_CR1_RXONLY   | SPI_CR1_CRCL   | \
+                                            SPI_CR1_CRCNEXT | SPI_CR1_CRCEN    | SPI_CR1_BIDIOE | \
+                                            SPI_CR1_BIDIMODE)
+
+#define LL_SPI_CRCCALCULATION_ENABLE       (SPI_CR1_CRCEN)           /*!< CRC calculation enabled  */
+
+ErrorStatus LL_SPI_Init(SPI_TypeDef *SPIx, LL_SPI_InitTypeDef *SPI_InitStruct)
+{
+  ErrorStatus status = ERROR;
+
+  /* Check the SPI Instance SPIx*/
+  assert_param(IS_SPI_ALL_INSTANCE(SPIx));
+
+  /* Check the SPI parameters from SPI_InitStruct*/
+  assert_param(IS_LL_SPI_TRANSFER_DIRECTION(SPI_InitStruct->TransferDirection));
+  assert_param(IS_LL_SPI_MODE(SPI_InitStruct->Mode));
+  assert_param(IS_LL_SPI_DATAWIDTH(SPI_InitStruct->DataWidth));
+  assert_param(IS_LL_SPI_POLARITY(SPI_InitStruct->ClockPolarity));
+  assert_param(IS_LL_SPI_PHASE(SPI_InitStruct->ClockPhase));
+  assert_param(IS_LL_SPI_NSS(SPI_InitStruct->NSS));
+  assert_param(IS_LL_SPI_BAUDRATE(SPI_InitStruct->BaudRate));
+  assert_param(IS_LL_SPI_BITORDER(SPI_InitStruct->BitOrder));
+  assert_param(IS_LL_SPI_CRCCALCULATION(SPI_InitStruct->CRCCalculation));
+
+  if (LL_SPI_IsEnabled(SPIx) == 0x00000000U)
+  {
+    /*---------------------------- SPIx CR1 Configuration ------------------------
+     * Configure SPIx CR1 with parameters:
+     * - TransferDirection:  SPI_CR1_BIDIMODE, SPI_CR1_BIDIOE and SPI_CR1_RXONLY bits
+     * - Master/Slave Mode:  SPI_CR1_MSTR bit
+     * - ClockPolarity:      SPI_CR1_CPOL bit
+     * - ClockPhase:         SPI_CR1_CPHA bit
+     * - NSS management:     SPI_CR1_SSM bit
+     * - BaudRate prescaler: SPI_CR1_BR[2:0] bits
+     * - BitOrder:           SPI_CR1_LSBFIRST bit
+     * - CRCCalculation:     SPI_CR1_CRCEN bit
+     */
+    MODIFY_REG(SPIx->CR1,
+               SPI_CR1_CLEAR_MASK,
+               SPI_InitStruct->TransferDirection | SPI_InitStruct->Mode |
+               SPI_InitStruct->ClockPolarity | SPI_InitStruct->ClockPhase |
+               SPI_InitStruct->NSS | SPI_InitStruct->BaudRate |
+               SPI_InitStruct->BitOrder | SPI_InitStruct->CRCCalculation);
+
+    /*---------------------------- SPIx CR2 Configuration ------------------------
+     * Configure SPIx CR2 with parameters:
+     * - DataWidth:          DS[3:0] bits
+     * - NSS management:     SSOE bit
+     */
+    MODIFY_REG(SPIx->CR2,
+               SPI_CR2_DS | SPI_CR2_SSOE,
+               SPI_InitStruct->DataWidth | (SPI_InitStruct->NSS >> 16U));
+
+    /* Set Rx FIFO to Quarter (1 Byte) in case of 8 Bits mode. No DataPacking by default */
+    if (SPI_InitStruct->DataWidth < LL_SPI_DATAWIDTH_9BIT)
+    {
+      LL_SPI_SetRxFIFOThreshold(SPIx, LL_SPI_RX_FIFO_TH_QUARTER);
+    }
+
+    /*---------------------------- SPIx CRCPR Configuration ----------------------
+     * Configure SPIx CRCPR with parameters:
+     * - CRCPoly:            CRCPOLY[15:0] bits
+     */
+    if (SPI_InitStruct->CRCCalculation == LL_SPI_CRCCALCULATION_ENABLE)
+    {
+      assert_param(IS_LL_SPI_CRC_POLYNOMIAL(SPI_InitStruct->CRCPoly));
+      LL_SPI_SetCRCPolynomial(SPIx, SPI_InitStruct->CRCPoly);
+    }
+    status = SUCCESS;
+  }
+
+  return status;
+}
+
+#define LL_SPI_CRCCALCULATION_DISABLE      0x00000000U               /*!< CRC calculation disabled */
+#define LL_SPI_CRCCALCULATION_ENABLE       (SPI_CR1_CRCEN)           /*!< CRC calculation enabled  */
+
+smtc_hal_mcu_status_t smtc_hal_mcu_spi_init( smtc_hal_mcu_spi_cfg_t cfg, smtc_hal_mcu_spi_inst_t* inst )
+{
+    struct smtc_hal_mcu_spi_inst_s* spi_cfg_slot = smtc_hal_mcu_spi_stm32l4_get_free_slot( );
+
+    if( spi_cfg_slot == NULL )
+    {
+        return SMTC_HAL_MCU_STATUS_ERROR;
+    }
+
+    spi_cfg_slot->spi = cfg->spi;
+
+    if( spi_cfg_slot->spi == SPI1 )
+    {
+        /* Peripheral clock enable */
+        LL_APB2_GRP1_EnableClock( LL_APB2_GRP1_PERIPH_SPI1 );
+        LL_AHB2_GRP1_EnableClock( LL_AHB2_GRP1_PERIPH_GPIOA );
+
+        /** SPI1 GPIO Configuration
+        PA5   ------> SPI1_SCK
+        PA6   ------> SPI1_MISO
+        PA7   ------> SPI1_MOSI
+        */
+        LL_GPIO_InitTypeDef GPIO_InitStruct = {
+            .Pin        = LL_GPIO_PIN_5 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7,
+            .Mode       = LL_GPIO_MODE_ALTERNATE,
+            .Speed      = LL_GPIO_SPEED_FREQ_VERY_HIGH,
+            .OutputType = LL_GPIO_OUTPUT_PUSHPULL,
+            .Pull       = LL_GPIO_PULL_NO,
+            .Alternate  = LL_GPIO_AF_5,
+        };
+
+        LL_GPIO_Init( GPIOA, &GPIO_InitStruct );
+    }
+    else if( spi_cfg_slot->spi == SPI3 )
+    {
+        /* Peripheral clock enable */
+        LL_APB1_GRP1_EnableClock( LL_APB1_GRP1_PERIPH_SPI3 );
+        LL_AHB2_GRP1_EnableClock( LL_AHB2_GRP1_PERIPH_GPIOC );
+
+        /** SPI3 GPIO Configuration
+        PC10   ------> SPI3_SCK
+        PC11   ------> SPI3_MISO
+        PC12   ------> SPI3_MOSI
+        */
+        LL_GPIO_InitTypeDef GPIO_InitStruct = {
+            .Pin        = LL_GPIO_PIN_10 | LL_GPIO_PIN_11 | LL_GPIO_PIN_12,
+            .Mode       = LL_GPIO_MODE_ALTERNATE,
+            .Speed      = LL_GPIO_SPEED_FREQ_VERY_HIGH,
+            .OutputType = LL_GPIO_OUTPUT_PUSHPULL,
+            .Pull       = LL_GPIO_PULL_NO,
+            .Alternate  = LL_GPIO_AF_6,
+        };
+
+        LL_GPIO_Init( GPIOC, &GPIO_InitStruct );
+    }
+    else
+    {
+        return SMTC_HAL_MCU_STATUS_BAD_PARAMETERS;
+    }
+
+    LL_SPI_InitTypeDef SPI_InitStruct = {
+        .BaudRate          = LL_SPI_BAUDRATEPRESCALER_DIV16,
+        .TransferDirection = LL_SPI_FULL_DUPLEX,
+        .Mode              = LL_SPI_MODE_MASTER,
+        .DataWidth         = LL_SPI_DATAWIDTH_8BIT,
+        .ClockPolarity     = LL_SPI_POLARITY_LOW,
+        .ClockPhase        = LL_SPI_PHASE_1EDGE,
+        .NSS               = LL_SPI_NSS_SOFT,
+        .BitOrder          = LL_SPI_MSB_FIRST,
+        .CRCCalculation    = LL_SPI_CRCCALCULATION_DISABLE,
+        .CRCPoly           = 7,
+    };
+
+    if( LL_SPI_Init( spi_cfg_slot->spi, &SPI_InitStruct ) != SUCCESS )
+    {
+        return SMTC_HAL_MCU_STATUS_ERROR;
+    }
+
+    LL_SPI_SetRxFIFOThreshold( spi_cfg_slot->spi, LL_SPI_RX_FIFO_TH_QUARTER );
+    LL_SPI_SetStandard( spi_cfg_slot->spi, LL_SPI_PROTOCOL_MOTOROLA );
+    LL_SPI_DisableNSSPulseMgt( spi_cfg_slot->spi );
+
+    LL_SPI_Enable( spi_cfg_slot->spi );
+    while( LL_SPI_IsEnabled( spi_cfg_slot->spi ) == 0 )
+        ;
+
+    spi_cfg_slot->is_cfged = true;
+
+    *inst = spi_cfg_slot;
+
+    return SMTC_HAL_MCU_STATUS_OK;
+}
+
 static smtc_hal_mcu_status_t smtc_hal_mcu_gpio_stm32l4_enable_clock( GPIO_TypeDef* port )
 {
     if( port == GPIOA )
@@ -452,72 +827,6 @@ static bool smtc_hal_mcu_gpio_stm32l4_is_configured( smtc_hal_mcu_gpio_cfg_t cfg
   *          - SUCCESS: GPIO registers are initialized according to GPIO_InitStruct content
   *          - ERROR:   Not applicable
   */
-ErrorStatus LL_GPIO_Init(GPIO_TypeDef *GPIOx, LL_GPIO_InitTypeDef *GPIO_InitStruct)
-{
-  uint32_t pinpos;
-  uint32_t currentpin;
-
-  /* Check the parameters */
-  assert_param(IS_GPIO_ALL_INSTANCE(GPIOx));
-  assert_param(IS_LL_GPIO_PIN(GPIO_InitStruct->Pin));
-  assert_param(IS_LL_GPIO_MODE(GPIO_InitStruct->Mode));
-  assert_param(IS_LL_GPIO_PULL(GPIO_InitStruct->Pull));
-
-  /* ------------------------- Configure the port pins ---------------- */
-  /* Initialize  pinpos on first pin set */
-  pinpos = POSITION_VAL(GPIO_InitStruct->Pin);
-
-  /* Configure the port pins */
-  while (((GPIO_InitStruct->Pin) >> pinpos) != 0x00u)
-  {
-    /* Get current io position */
-    currentpin = (GPIO_InitStruct->Pin) & (0x00000001uL << pinpos);
-
-    if (currentpin != 0x00u)
-    {
-      if ((GPIO_InitStruct->Mode == LL_GPIO_MODE_OUTPUT) || (GPIO_InitStruct->Mode == LL_GPIO_MODE_ALTERNATE))
-      {
-        /* Check Speed mode parameters */
-        assert_param(IS_LL_GPIO_SPEED(GPIO_InitStruct->Speed));
-
-        /* Speed mode configuration */
-        LL_GPIO_SetPinSpeed(GPIOx, currentpin, GPIO_InitStruct->Speed);
-
-        /* Check Output mode parameters */
-        assert_param(IS_LL_GPIO_OUTPUT_TYPE(GPIO_InitStruct->OutputType));
-
-        /* Output mode configuration*/
-        LL_GPIO_SetPinOutputType(GPIOx, GPIO_InitStruct->Pin, GPIO_InitStruct->OutputType);
-      }
-
-      /* Pull-up Pull down resistor configuration*/
-      LL_GPIO_SetPinPull(GPIOx, currentpin, GPIO_InitStruct->Pull);
-
-      if (GPIO_InitStruct->Mode == LL_GPIO_MODE_ALTERNATE)
-      {
-        /* Check Alternate parameter */
-        assert_param(IS_LL_GPIO_ALTERNATE(GPIO_InitStruct->Alternate));
-
-        /* Speed mode configuration */
-        if (currentpin < LL_GPIO_PIN_8)
-        {
-          LL_GPIO_SetAFPin_0_7(GPIOx, currentpin, GPIO_InitStruct->Alternate);
-        }
-        else
-        {
-          LL_GPIO_SetAFPin_8_15(GPIOx, currentpin, GPIO_InitStruct->Alternate);
-        }
-      }
-
-      /* Pin Mode configuration */
-      LL_GPIO_SetPinMode(GPIOx, currentpin, GPIO_InitStruct->Mode);
-    }
-    pinpos++;
-  }
-
-  return (SUCCESS);
-}
-
 smtc_hal_mcu_status_t smtc_hal_mcu_gpio_init_output( smtc_hal_mcu_gpio_cfg_t               cfg,
                                                      const smtc_hal_mcu_gpio_output_cfg_t* output_cfg,
                                                      smtc_hal_mcu_gpio_inst_t*             inst )
@@ -573,121 +882,278 @@ smtc_hal_mcu_status_t smtc_hal_mcu_gpio_init_output( smtc_hal_mcu_gpio_cfg_t    
     return SMTC_HAL_MCU_STATUS_OK;
 }
 
-smtc_hal_mcu_status_t smtc_hal_mcu_gpio_init_input( smtc_hal_mcu_gpio_cfg_t              cfg,
-                                                    const smtc_hal_mcu_gpio_input_cfg_t* input_cfg,
-                                                    smtc_hal_mcu_gpio_inst_t*            inst )
+
+static bool smtc_hal_mcu_gpio_stm32l4_is_real_inst( smtc_hal_mcu_gpio_inst_t inst )
 {
-    smtc_hal_mcu_status_t status = SMTC_HAL_MCU_STATUS_ERROR;
-
-    if( smtc_hal_mcu_gpio_stm32l4_is_configured( cfg ) == true )
+    for( int i = 0; i < SMTC_HAL_MCU_GPIO_STM32L4_ARRAY_SIZE; i++ )
     {
-        return SMTC_HAL_MCU_STATUS_ERROR;
-    }
-
-    struct smtc_hal_mcu_gpio_inst_s* gpio_cfg_slot = smtc_hal_mcu_gpio_stm32l4_get_free_slot( );
-
-    if( gpio_cfg_slot == NULL )
-    {
-        return SMTC_HAL_MCU_STATUS_ERROR;
-    }
-
-    gpio_cfg_slot->is_cfged     = false;
-    gpio_cfg_slot->is_irq_cfged = false;
-    gpio_cfg_slot->port         = cfg->port;
-    gpio_cfg_slot->pin          = cfg->pin;
-
-    LL_GPIO_InitTypeDef GPIO_InitStruct = {
-        .Pin        = gpio_cfg_slot->pin,
-        .Mode       = LL_GPIO_MODE_INPUT,
-        .Speed      = LL_GPIO_SPEED_FREQ_LOW,
-        .OutputType = LL_GPIO_OUTPUT_OPENDRAIN,
-        .Pull       = LL_GPIO_PULL_NO,
-    };
-
-    status = smtc_hal_mcu_gpio_stm32l4_enable_clock( gpio_cfg_slot->port );
-    if( status != SMTC_HAL_MCU_STATUS_OK )
-    {
-        return status;
-    }
-
-    if( LL_GPIO_Init( gpio_cfg_slot->port, &GPIO_InitStruct ) != SUCCESS )
-    {
-        return SMTC_HAL_MCU_STATUS_ERROR;
-    }
-
-    if( input_cfg->irq_mode != SMTC_HAL_MCU_GPIO_IRQ_MODE_OFF )
-    {
-        uint32_t trigger;
-
-        smtc_hal_mcu_gpio_irq_exti_cfg_t exti_cfg;
-
-        status = smtc_hal_mcu_gpio_stm32l4_get_exti_cfg( gpio_cfg_slot, &exti_cfg );
-        if( status != SMTC_HAL_MCU_STATUS_OK )
+        if( inst == &gpio_inst_array[i] )
         {
-            return status;
+            return true;
         }
-
-        status = smtc_hal_mcu_gpio_stm32l4_get_trigger( input_cfg->irq_mode, &trigger );
-        if( status != SMTC_HAL_MCU_STATUS_OK )
-        {
-            return status;
-        }
-
-        gpio_cfg_slot->irq_cfg.input_cfg      = *input_cfg;
-        gpio_cfg_slot->irq_cfg.is_irq_enabled = false;
-        gpio_cfg_slot->irq_cfg.exti_cfg       = exti_cfg;
-
-        LL_EXTI_InitTypeDef EXTI_InitStruct = {
-            .Line_0_31   = gpio_cfg_slot->irq_cfg.exti_cfg.exti_line,
-            .Line_32_63  = LL_EXTI_LINE_NONE,
-            .LineCommand = ENABLE,
-            .Mode        = LL_EXTI_MODE_IT,
-            .Trigger     = trigger,
-        };
-
-        LL_EXTI_Init( &EXTI_InitStruct );
-
-        gpio_cfg_slot->is_irq_cfged = true;
     }
 
-    gpio_cfg_slot->is_cfged = true;
+    return false;
+}
 
-    *inst = gpio_cfg_slot;
+#define LL_SYSCFG_EXTI_LINE0               (uint32_t)(0x000FU << 16U | 0U)  /* !< EXTI_POSITION_0  | EXTICR[0] */
+#define LL_SYSCFG_EXTI_LINE1               (uint32_t)(0x00F0U << 16U | 0U)  /* !< EXTI_POSITION_4  | EXTICR[0] */
+#define LL_SYSCFG_EXTI_LINE2               (uint32_t)(0x0F00U << 16U | 0U)  /* !< EXTI_POSITION_8  | EXTICR[0] */
+#define LL_SYSCFG_EXTI_LINE3               (uint32_t)(0xF000U << 16U | 0U)  /* !< EXTI_POSITION_12 | EXTICR[0] */
+#define LL_SYSCFG_EXTI_LINE4               (uint32_t)(0x000FU << 16U | 1U)  /* !< EXTI_POSITION_0  | EXTICR[1] */
+#define LL_SYSCFG_EXTI_LINE5               (uint32_t)(0x00F0U << 16U | 1U)  /* !< EXTI_POSITION_4  | EXTICR[1] */
+#define LL_SYSCFG_EXTI_LINE6               (uint32_t)(0x0F00U << 16U | 1U)  /* !< EXTI_POSITION_8  | EXTICR[1] */
+#define LL_SYSCFG_EXTI_LINE7               (uint32_t)(0xF000U << 16U | 1U)  /* !< EXTI_POSITION_12 | EXTICR[1] */
+#define LL_SYSCFG_EXTI_LINE8               (uint32_t)(0x000FU << 16U | 2U)  /* !< EXTI_POSITION_0  | EXTICR[2] */
+#define LL_SYSCFG_EXTI_LINE9               (uint32_t)(0x00F0U << 16U | 2U)  /* !< EXTI_POSITION_4  | EXTICR[2] */
+#define LL_SYSCFG_EXTI_LINE10              (uint32_t)(0x0F00U << 16U | 2U)  /* !< EXTI_POSITION_8  | EXTICR[2] */
+#define LL_SYSCFG_EXTI_LINE11              (uint32_t)(0xF000U << 16U | 2U)  /* !< EXTI_POSITION_12 | EXTICR[2] */
+#define LL_SYSCFG_EXTI_LINE12              (uint32_t)(0x000FU << 16U | 3U)  /* !< EXTI_POSITION_0  | EXTICR[3] */
+#define LL_SYSCFG_EXTI_LINE13              (uint32_t)(0x00F0U << 16U | 3U)  /* !< EXTI_POSITION_4  | EXTICR[3] */
+#define LL_SYSCFG_EXTI_LINE14              (uint32_t)(0x0F00U << 16U | 3U)  /* !< EXTI_POSITION_8  | EXTICR[3] */
+#define LL_SYSCFG_EXTI_LINE15              (uint32_t)(0xF000U << 16U | 3U)  /* !< EXTI_POSITION_12 | EXTICR[3] */
 
-    return status;
+#define LL_SYSCFG_EXTI_PORTA               0U                        /*!< EXTI PORT A                        */
+#define LL_SYSCFG_EXTI_PORTB               1U                        /*!< EXTI PORT B                        */
+#define LL_SYSCFG_EXTI_PORTC               2U                        /*!< EXTI PORT C                        */
+#define LL_SYSCFG_EXTI_PORTD               3U                        /*!< EXTI PORT D                        */
+#define LL_SYSCFG_EXTI_PORTE               4U                        /*!< EXTI PORT E                        */
+#define LL_SYSCFG_EXTI_PORTF               5U                        /*!< EXTI PORT F                        */
+#define LL_SYSCFG_EXTI_PORTG               6U                        /*!< EXTI PORT G                        */
+#define LL_SYSCFG_EXTI_PORTH               7U                        /*!< EXTI PORT H                        */
+#define LL_SYSCFG_EXTI_PORTI               8U                        /*!< EXTI PORT I                        */
+
+#define LL_EXTI_LINE_0                 EXTI_IMR1_IM0           /*!< Extended line 0 */
+#define LL_EXTI_LINE_1                 EXTI_IMR1_IM1           /*!< Extended line 1 */
+#define LL_EXTI_LINE_2                 EXTI_IMR1_IM2           /*!< Extended line 2 */
+#define LL_EXTI_LINE_3                 EXTI_IMR1_IM3           /*!< Extended line 3 */
+#define LL_EXTI_LINE_4                 EXTI_IMR1_IM4           /*!< Extended line 4 */
+#define LL_EXTI_LINE_5                 EXTI_IMR1_IM5           /*!< Extended line 5 */
+#define LL_EXTI_LINE_6                 EXTI_IMR1_IM6           /*!< Extended line 6 */
+#define LL_EXTI_LINE_7                 EXTI_IMR1_IM7           /*!< Extended line 7 */
+#define LL_EXTI_LINE_8                 EXTI_IMR1_IM8           /*!< Extended line 8 */
+#define LL_EXTI_LINE_9                 EXTI_IMR1_IM9           /*!< Extended line 9 */
+#define LL_EXTI_LINE_10                EXTI_IMR1_IM10          /*!< Extended line 10 */
+#define LL_EXTI_LINE_11                EXTI_IMR1_IM11          /*!< Extended line 11 */
+#define LL_EXTI_LINE_12                EXTI_IMR1_IM12          /*!< Extended line 12 */
+#define LL_EXTI_LINE_13                EXTI_IMR1_IM13          /*!< Extended line 13 */
+#define LL_EXTI_LINE_14                EXTI_IMR1_IM14          /*!< Extended line 14 */
+#define LL_EXTI_LINE_15                EXTI_IMR1_IM15          /*!< Extended line 15 */
+
+static smtc_hal_mcu_status_t smtc_hal_mcu_gpio_stm32l4_get_exti_cfg( smtc_hal_mcu_gpio_inst_t          inst,
+                                                                     smtc_hal_mcu_gpio_irq_exti_cfg_t* exti_cfg )
+{
+    if( inst->pin == LL_GPIO_PIN_0 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_0;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE0;
+        exti_cfg->irq_number       = EXTI0_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_1 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_1;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE1;
+        exti_cfg->irq_number       = EXTI1_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_2 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_2;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE2;
+        exti_cfg->irq_number       = EXTI2_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_3 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_3;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE3;
+        exti_cfg->irq_number       = EXTI3_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_4 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_4;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE4;
+        exti_cfg->irq_number       = EXTI4_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_5 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_5;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE5;
+        exti_cfg->irq_number       = EXTI9_5_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_6 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_6;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE6;
+        exti_cfg->irq_number       = EXTI9_5_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_7 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_7;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE7;
+        exti_cfg->irq_number       = EXTI9_5_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_8 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_8;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE8;
+        exti_cfg->irq_number       = EXTI9_5_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_9 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_9;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE9;
+        exti_cfg->irq_number       = EXTI9_5_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_10 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_10;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE10;
+        exti_cfg->irq_number       = EXTI15_10_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_11 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_11;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE11;
+        exti_cfg->irq_number       = EXTI15_10_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_12 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_12;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE12;
+        exti_cfg->irq_number       = EXTI15_10_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_13 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_13;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE13;
+        exti_cfg->irq_number       = EXTI15_10_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_14 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_14;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE14;
+        exti_cfg->irq_number       = EXTI15_10_IRQn;
+    }
+    else if( inst->pin == LL_GPIO_PIN_15 )
+    {
+        exti_cfg->exti_line        = LL_EXTI_LINE_15;
+        exti_cfg->syscfg_exti_line = LL_SYSCFG_EXTI_LINE15;
+        exti_cfg->irq_number       = EXTI15_10_IRQn;
+    }
+    else
+    {
+        return SMTC_HAL_MCU_STATUS_BAD_PARAMETERS;
+    }
+
+    if( inst->port == GPIOA )
+    {
+        exti_cfg->syscfg_exti_port = LL_SYSCFG_EXTI_PORTA;
+    }
+    else if( inst->port == GPIOB )
+    {
+        exti_cfg->syscfg_exti_port = LL_SYSCFG_EXTI_PORTB;
+    }
+    else if( inst->port == GPIOC )
+    {
+        exti_cfg->syscfg_exti_port = LL_SYSCFG_EXTI_PORTC;
+    }
+    else if( inst->port == GPIOD )
+    {
+        exti_cfg->syscfg_exti_port = LL_SYSCFG_EXTI_PORTD;
+    }
+#if defined( GPIOE )
+    else if( inst->port == GPIOE )
+    {
+        exti_cfg->syscfg_exti_port = LL_SYSCFG_EXTI_PORTE;
+    }
+#endif
+#if defined( GPIOF )
+    else if( inst->port == GPIOF )
+    {
+        exti_cfg->syscfg_exti_port = LL_SYSCFG_EXTI_PORTF;
+    }
+#endif
+#if defined( GPIOG )
+    else if( inst->port == GPIOG )
+    {
+        exti_cfg->syscfg_exti_port = LL_SYSCFG_EXTI_PORTG;
+    }
+#endif
+#if defined( GPIOH )
+    else if( inst->port == GPIOH )
+    {
+        exti_cfg->syscfg_exti_port = LL_SYSCFG_EXTI_PORTH;
+    }
+#endif
+#if defined( GPIOI )
+    else if( inst->port == GPIOI )
+    {
+        exti_cfg->syscfg_exti_port = LL_SYSCFG_EXTI_PORTI;
+    }
+#endif
+    else
+    {
+        return SMTC_HAL_MCU_STATUS_BAD_PARAMETERS;
+    }
+
+    return SMTC_HAL_MCU_STATUS_OK;
+}
+
+
+smtc_hal_mcu_status_t smtc_hal_mcu_gpio_enable_irq( smtc_hal_mcu_gpio_inst_t inst )
+{
+    if( smtc_hal_mcu_gpio_stm32l4_is_real_inst( inst ) == false )
+    {
+        return SMTC_HAL_MCU_STATUS_BAD_PARAMETERS;
+    }
+
+    if( inst->is_irq_cfged == true )
+    {
+        if( inst->irq_cfg.is_irq_enabled == false )
+        {
+            LL_SYSCFG_SetEXTISource( inst->irq_cfg.exti_cfg.syscfg_exti_port, inst->irq_cfg.exti_cfg.syscfg_exti_line );
+            NVIC_EnableIRQ( inst->irq_cfg.exti_cfg.irq_number );
+            NVIC_SetPriority( inst->irq_cfg.exti_cfg.irq_number, 0 );
+
+            inst->irq_cfg.is_irq_enabled = true;
+
+            return SMTC_HAL_MCU_STATUS_OK;
+        }
+    }
+
+    return SMTC_HAL_MCU_STATUS_BAD_PARAMETERS;
 }
 
 lr11xx_hal_context_t* apps_common_lr11xx_get_context( )
 {
-//    context.busy.cfg                 = smtc_shield_pinout_mapping_get_gpio_cfg( SMTC_SHIELD_PINOUT_D3 );
-//    context.busy.cfg_input.pull_mode = SMTC_HAL_MCU_GPIO_PULL_MODE_NONE;
-//    context.busy.cfg_input.irq_mode  = SMTC_HAL_MCU_GPIO_IRQ_MODE_OFF;
-//    context.busy.cfg_input.callback  = NULL;
-//
-//    context.irq.cfg                 = smtc_shield_pinout_mapping_get_gpio_cfg( SMTC_SHIELD_PINOUT_D5 );
-//    context.irq.cfg_input.pull_mode = SMTC_HAL_MCU_GPIO_PULL_MODE_NONE;
-//    context.irq.cfg_input.irq_mode  = SMTC_HAL_MCU_GPIO_IRQ_MODE_RISING;
-//    context.irq.cfg_input.callback  = radio_on_dio_irq;
-//    context.irq.cfg_input.context   = NULL;
-//
-//    context.nss.cfg                      = smtc_shield_pinout_mapping_get_gpio_cfg( SMTC_SHIELD_PINOUT_D7 );
-//    context.nss.cfg_output.initial_state = SMTC_HAL_MCU_GPIO_STATE_HIGH;
-//    context.nss.cfg_output.mode          = SMTC_HAL_MCU_GPIO_OUTPUT_MODE_PUSH_PULL;
-//
-//    context.reset.cfg                      = smtc_shield_pinout_mapping_get_gpio_cfg( SMTC_SHIELD_PINOUT_A0 );
-//    context.reset.cfg_output.initial_state = SMTC_HAL_MCU_GPIO_STATE_HIGH;
-//    context.reset.cfg_output.mode          = SMTC_HAL_MCU_GPIO_OUTPUT_MODE_PUSH_PULL;
-//
-//    context.spi.cfg.spi = SPI1;
-//
-//    smtc_hal_mcu_gpio_init_input( context.busy.cfg, &( context.busy.cfg_input ), &( context.busy.inst ) );
-//    smtc_hal_mcu_gpio_init_input( context.irq.cfg, &( context.irq.cfg_input ), &( context.irq.inst ) );
-//    smtc_hal_mcu_gpio_init_output( context.nss.cfg, &( context.nss.cfg_output ), &( context.nss.inst ) );
-//    smtc_hal_mcu_gpio_init_output( context.reset.cfg, &( context.reset.cfg_output ), &( context.reset.inst ) );
-//
-//    smtc_hal_mcu_gpio_enable_irq( context.irq.inst );
-//
-//    smtc_hal_mcu_spi_init( &( context.spi.cfg ), &( context.spi.inst ) );
+    context.busy.cfg                 = smtc_shield_pinout_mapping_get_gpio_cfg( SMTC_SHIELD_PINOUT_D3 );
+    context.busy.cfg_input.pull_mode = SMTC_HAL_MCU_GPIO_PULL_MODE_NONE;
+    context.busy.cfg_input.irq_mode  = SMTC_HAL_MCU_GPIO_IRQ_MODE_OFF;
+    context.busy.cfg_input.callback  = NULL;
+
+    context.irq.cfg                 = smtc_shield_pinout_mapping_get_gpio_cfg( SMTC_SHIELD_PINOUT_D5 );
+    context.irq.cfg_input.pull_mode = SMTC_HAL_MCU_GPIO_PULL_MODE_NONE;
+    context.irq.cfg_input.irq_mode  = SMTC_HAL_MCU_GPIO_IRQ_MODE_RISING;
+    context.irq.cfg_input.callback  = radio_on_dio_irq;
+    context.irq.cfg_input.context   = NULL;
+
+    context.nss.cfg                      = smtc_shield_pinout_mapping_get_gpio_cfg( SMTC_SHIELD_PINOUT_D7 );
+    context.nss.cfg_output.initial_state = SMTC_HAL_MCU_GPIO_STATE_HIGH;
+    context.nss.cfg_output.mode          = SMTC_HAL_MCU_GPIO_OUTPUT_MODE_PUSH_PULL;
+
+    context.reset.cfg                      = smtc_shield_pinout_mapping_get_gpio_cfg( SMTC_SHIELD_PINOUT_A0 );
+    context.reset.cfg_output.initial_state = SMTC_HAL_MCU_GPIO_STATE_HIGH;
+    context.reset.cfg_output.mode          = SMTC_HAL_MCU_GPIO_OUTPUT_MODE_PUSH_PULL;
+
+    context.spi.cfg.spi = SPI1;
+
+    smtc_hal_mcu_gpio_init_input( context.busy.cfg, &( context.busy.cfg_input ), &( context.busy.inst ) );
+    smtc_hal_mcu_gpio_init_input( context.irq.cfg, &( context.irq.cfg_input ), &( context.irq.inst ) );
+    smtc_hal_mcu_gpio_init_output( context.nss.cfg, &( context.nss.cfg_output ), &( context.nss.inst ) );
+    smtc_hal_mcu_gpio_init_output( context.reset.cfg, &( context.reset.cfg_output ), &( context.reset.inst ) );
+
+    smtc_hal_mcu_gpio_enable_irq( context.irq.inst );
+
+    smtc_hal_mcu_spi_init( &( context.spi.cfg ), &( context.spi.inst ) );
 
     return &context;
 }
@@ -1012,7 +1478,7 @@ void apps_common_lr11xx_irq_process( const void* context, lr11xx_system_irq_mask
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_TX_DONE ) == LR11XX_SYSTEM_IRQ_TX_DONE )
         {
-            HAL_DBG_TRACE_INFO( "Tx done\n" );
+            printf( "Tx done\n" );
             on_tx_done( );
         }
 
@@ -1048,7 +1514,7 @@ void apps_common_lr11xx_irq_process( const void* context, lr11xx_system_irq_mask
             }
             else
             {
-                HAL_DBG_TRACE_INFO( "Rx done\n" );
+            	printf( "Rx done\n" );
                 on_rx_done( );
             }
         }
@@ -1431,6 +1897,359 @@ void on_rttof_exchange_valid( void )
 void on_rttof_timeout( void )
 {
     HAL_DBG_TRACE_INFO( "No IRQ routine defined\n" );
+}
+
+
+#define LL_EXTI_TRIGGER_NONE            ((uint8_t)0x00U) /*!< No Trigger Mode */
+#define LL_EXTI_TRIGGER_RISING          ((uint8_t)0x01U) /*!< Trigger Rising Mode */
+#define LL_EXTI_TRIGGER_FALLING         ((uint8_t)0x02U) /*!< Trigger Falling Mode */
+#define LL_EXTI_TRIGGER_RISING_FALLING  ((uint8_t)0x03U) /*!< Trigger Rising & Falling Mode */
+
+static smtc_hal_mcu_status_t smtc_hal_mcu_gpio_stm32l4_get_trigger( smtc_hal_mcu_gpio_irq_mode_t mode,
+                                                                    uint32_t*                    trigger )
+{
+    switch( mode )
+    {
+    case SMTC_HAL_MCU_GPIO_IRQ_MODE_OFF:
+    {
+        *trigger = LL_EXTI_TRIGGER_NONE;
+        break;
+    }
+    case SMTC_HAL_MCU_GPIO_IRQ_MODE_RISING:
+    {
+        *trigger = LL_EXTI_TRIGGER_RISING;
+        break;
+    }
+    case SMTC_HAL_MCU_GPIO_IRQ_MODE_FALLING:
+    {
+        *trigger = LL_EXTI_TRIGGER_FALLING;
+        break;
+    }
+    case SMTC_HAL_MCU_GPIO_IRQ_MODE_RISING_FALLING:
+    {
+        *trigger = LL_EXTI_TRIGGER_RISING_FALLING;
+        break;
+    }
+    default:
+    {
+        return SMTC_HAL_MCU_STATUS_BAD_PARAMETERS;
+    }
+    }
+
+    return SMTC_HAL_MCU_STATUS_OK;
+}
+
+__STATIC_INLINE void LL_EXTI_DisableEvent_0_31(uint32_t ExtiLine)
+{
+  CLEAR_BIT(EXTI->EMR1, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_EnableIT_0_31(uint32_t ExtiLine)
+{
+  SET_BIT(EXTI->IMR1, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_DisableIT_0_31(uint32_t ExtiLine)
+{
+  CLEAR_BIT(EXTI->IMR1, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_EnableEvent_0_31(uint32_t ExtiLine)
+{
+  SET_BIT(EXTI->EMR1, ExtiLine);
+
+}
+
+__STATIC_INLINE void LL_EXTI_DisableFallingTrig_0_31(uint32_t ExtiLine)
+{
+  CLEAR_BIT(EXTI->FTSR1, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_EnableRisingTrig_0_31(uint32_t ExtiLine)
+{
+  SET_BIT(EXTI->RTSR1, ExtiLine);
+
+}
+
+__STATIC_INLINE void LL_EXTI_DisableRisingTrig_0_31(uint32_t ExtiLine)
+{
+  CLEAR_BIT(EXTI->RTSR1, ExtiLine);
+
+}
+
+__STATIC_INLINE void LL_EXTI_EnableFallingTrig_0_31(uint32_t ExtiLine)
+{
+  SET_BIT(EXTI->FTSR1, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_DisableEvent_32_63(uint32_t ExtiLine)
+{
+  CLEAR_BIT(EXTI->EMR2, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_EnableIT_32_63(uint32_t ExtiLine)
+{
+  SET_BIT(EXTI->IMR2, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_DisableIT_32_63(uint32_t ExtiLine)
+{
+  CLEAR_BIT(EXTI->IMR2, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_EnableEvent_32_63(uint32_t ExtiLine)
+{
+  SET_BIT(EXTI->EMR2, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_DisableFallingTrig_32_63(uint32_t ExtiLine)
+{
+  CLEAR_BIT(EXTI->FTSR2, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_EnableRisingTrig_32_63(uint32_t ExtiLine)
+{
+  SET_BIT(EXTI->RTSR2, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_DisableRisingTrig_32_63(uint32_t ExtiLine)
+{
+  CLEAR_BIT(EXTI->RTSR2, ExtiLine);
+}
+
+__STATIC_INLINE void LL_EXTI_EnableFallingTrig_32_63(uint32_t ExtiLine)
+{
+  SET_BIT(EXTI->FTSR2, ExtiLine);
+}
+
+#define LL_EXTI_MODE_IT                 ((uint8_t)0x00U) /*!< Interrupt Mode */
+#define LL_EXTI_MODE_EVENT              ((uint8_t)0x01U) /*!< Event Mode */
+#define LL_EXTI_MODE_IT_EVENT           ((uint8_t)0x02U) /*!< Interrupt & Event Mode */
+
+/**
+  * @brief  Initialize the EXTI registers according to the specified parameters in EXTI_InitStruct.
+  * @param  EXTI_InitStruct pointer to a @ref LL_EXTI_InitTypeDef structure.
+  * @retval An ErrorStatus enumeration value:
+  *          - 0x00: EXTI registers are initialized
+  *          - any other value : wrong configuration
+  */
+uint32_t LL_EXTI_Init(LL_EXTI_InitTypeDef *EXTI_InitStruct)
+{
+  uint32_t status = 0x00u;
+
+  /* Check the parameters */
+  assert_param(IS_LL_EXTI_LINE_0_31(EXTI_InitStruct->Line_0_31));
+  assert_param(IS_LL_EXTI_LINE_32_63(EXTI_InitStruct->Line_32_63));
+  assert_param(IS_FUNCTIONAL_STATE(EXTI_InitStruct->LineCommand));
+  assert_param(IS_LL_EXTI_MODE(EXTI_InitStruct->Mode));
+
+  /* ENABLE LineCommand */
+  if (EXTI_InitStruct->LineCommand != DISABLE)
+  {
+    assert_param(IS_LL_EXTI_TRIGGER(EXTI_InitStruct->Trigger));
+
+    /* Configure EXTI Lines in range from 0 to 31 */
+    if (EXTI_InitStruct->Line_0_31 != LL_EXTI_LINE_NONE)
+    {
+      switch (EXTI_InitStruct->Mode)
+      {
+        case LL_EXTI_MODE_IT:
+          /* First Disable Event on provided Lines */
+          LL_EXTI_DisableEvent_0_31(EXTI_InitStruct->Line_0_31);
+          /* Then Enable IT on provided Lines */
+          LL_EXTI_EnableIT_0_31(EXTI_InitStruct->Line_0_31);
+          break;
+        case LL_EXTI_MODE_EVENT:
+          /* First Disable IT on provided Lines */
+          LL_EXTI_DisableIT_0_31(EXTI_InitStruct->Line_0_31);
+          /* Then Enable Event on provided Lines */
+          LL_EXTI_EnableEvent_0_31(EXTI_InitStruct->Line_0_31);
+          break;
+        case LL_EXTI_MODE_IT_EVENT:
+          /* Directly Enable IT & Event on provided Lines */
+          LL_EXTI_EnableIT_0_31(EXTI_InitStruct->Line_0_31);
+          LL_EXTI_EnableEvent_0_31(EXTI_InitStruct->Line_0_31);
+          break;
+        default:
+          status = 0x01u;
+          break;
+      }
+      if (EXTI_InitStruct->Trigger != LL_EXTI_TRIGGER_NONE)
+      {
+        switch (EXTI_InitStruct->Trigger)
+        {
+          case LL_EXTI_TRIGGER_RISING:
+            /* First Disable Falling Trigger on provided Lines */
+            LL_EXTI_DisableFallingTrig_0_31(EXTI_InitStruct->Line_0_31);
+            /* Then Enable Rising Trigger on provided Lines */
+            LL_EXTI_EnableRisingTrig_0_31(EXTI_InitStruct->Line_0_31);
+            break;
+          case LL_EXTI_TRIGGER_FALLING:
+            /* First Disable Rising Trigger on provided Lines */
+            LL_EXTI_DisableRisingTrig_0_31(EXTI_InitStruct->Line_0_31);
+            /* Then Enable Falling Trigger on provided Lines */
+            LL_EXTI_EnableFallingTrig_0_31(EXTI_InitStruct->Line_0_31);
+            break;
+          case LL_EXTI_TRIGGER_RISING_FALLING:
+            LL_EXTI_EnableRisingTrig_0_31(EXTI_InitStruct->Line_0_31);
+            LL_EXTI_EnableFallingTrig_0_31(EXTI_InitStruct->Line_0_31);
+            break;
+          default:
+            status |= 0x02u;
+            break;
+        }
+      }
+    }
+    /* Configure EXTI Lines in range from 32 to 63 */
+    if (EXTI_InitStruct->Line_32_63 != LL_EXTI_LINE_NONE)
+    {
+      switch (EXTI_InitStruct->Mode)
+      {
+        case LL_EXTI_MODE_IT:
+          /* First Disable Event on provided Lines */
+          LL_EXTI_DisableEvent_32_63(EXTI_InitStruct->Line_32_63);
+          /* Then Enable IT on provided Lines */
+          LL_EXTI_EnableIT_32_63(EXTI_InitStruct->Line_32_63);
+          break;
+        case LL_EXTI_MODE_EVENT:
+          /* First Disable IT on provided Lines */
+          LL_EXTI_DisableIT_32_63(EXTI_InitStruct->Line_32_63);
+          /* Then Enable Event on provided Lines */
+          LL_EXTI_EnableEvent_32_63(EXTI_InitStruct->Line_32_63);
+          break;
+        case LL_EXTI_MODE_IT_EVENT:
+          /* Directly Enable IT & Event on provided Lines */
+          LL_EXTI_EnableIT_32_63(EXTI_InitStruct->Line_32_63);
+          LL_EXTI_EnableEvent_32_63(EXTI_InitStruct->Line_32_63);
+          break;
+        default:
+          status |= 0x04u;
+          break;
+      }
+      if (EXTI_InitStruct->Trigger != LL_EXTI_TRIGGER_NONE)
+      {
+        switch (EXTI_InitStruct->Trigger)
+        {
+          case LL_EXTI_TRIGGER_RISING:
+            /* First Disable Falling Trigger on provided Lines */
+            LL_EXTI_DisableFallingTrig_32_63(EXTI_InitStruct->Line_32_63);
+            /* Then Enable IT on provided Lines */
+            LL_EXTI_EnableRisingTrig_32_63(EXTI_InitStruct->Line_32_63);
+            break;
+          case LL_EXTI_TRIGGER_FALLING:
+            /* First Disable Rising Trigger on provided Lines */
+            LL_EXTI_DisableRisingTrig_32_63(EXTI_InitStruct->Line_32_63);
+            /* Then Enable Falling Trigger on provided Lines */
+            LL_EXTI_EnableFallingTrig_32_63(EXTI_InitStruct->Line_32_63);
+            break;
+          case LL_EXTI_TRIGGER_RISING_FALLING:
+            LL_EXTI_EnableRisingTrig_32_63(EXTI_InitStruct->Line_32_63);
+            LL_EXTI_EnableFallingTrig_32_63(EXTI_InitStruct->Line_32_63);
+            break;
+          default:
+            status = ERROR;
+            break;
+        }
+      }
+    }
+  }
+  /* DISABLE LineCommand */
+  else
+  {
+    /* De-configure EXTI Lines in range from 0 to 31 */
+    LL_EXTI_DisableIT_0_31(EXTI_InitStruct->Line_0_31);
+    LL_EXTI_DisableEvent_0_31(EXTI_InitStruct->Line_0_31);
+    /* De-configure EXTI Lines in range from 32 to 63 */
+    LL_EXTI_DisableIT_32_63(EXTI_InitStruct->Line_32_63);
+    LL_EXTI_DisableEvent_32_63(EXTI_InitStruct->Line_32_63);
+  }
+
+  return status;
+}
+
+
+smtc_hal_mcu_status_t smtc_hal_mcu_gpio_init_input( smtc_hal_mcu_gpio_cfg_t              cfg,
+                                                    const smtc_hal_mcu_gpio_input_cfg_t* input_cfg,
+                                                    smtc_hal_mcu_gpio_inst_t*            inst )
+{
+    smtc_hal_mcu_status_t status = SMTC_HAL_MCU_STATUS_ERROR;
+
+    if( smtc_hal_mcu_gpio_stm32l4_is_configured( cfg ) == true )
+    {
+        return SMTC_HAL_MCU_STATUS_ERROR;
+    }
+
+    struct smtc_hal_mcu_gpio_inst_s* gpio_cfg_slot = smtc_hal_mcu_gpio_stm32l4_get_free_slot( );
+
+    if( gpio_cfg_slot == NULL )
+    {
+        return SMTC_HAL_MCU_STATUS_ERROR;
+    }
+
+    gpio_cfg_slot->is_cfged     = false;
+    gpio_cfg_slot->is_irq_cfged = false;
+    gpio_cfg_slot->port         = cfg->port;
+    gpio_cfg_slot->pin          = cfg->pin;
+
+    LL_GPIO_InitTypeDef GPIO_InitStruct = {
+        .Pin        = gpio_cfg_slot->pin,
+        .Mode       = LL_GPIO_MODE_INPUT,
+        .Speed      = LL_GPIO_SPEED_FREQ_LOW,
+        .OutputType = LL_GPIO_OUTPUT_OPENDRAIN,
+        .Pull       = LL_GPIO_PULL_NO,
+    };
+
+    status = smtc_hal_mcu_gpio_stm32l4_enable_clock( gpio_cfg_slot->port );
+    if( status != SMTC_HAL_MCU_STATUS_OK )
+    {
+        return status;
+    }
+
+    if( LL_GPIO_Init( gpio_cfg_slot->port, &GPIO_InitStruct ) != SUCCESS )
+    {
+        return SMTC_HAL_MCU_STATUS_ERROR;
+    }
+
+    if( input_cfg->irq_mode != SMTC_HAL_MCU_GPIO_IRQ_MODE_OFF )
+    {
+        uint32_t trigger;
+
+        smtc_hal_mcu_gpio_irq_exti_cfg_t exti_cfg;
+
+        status = smtc_hal_mcu_gpio_stm32l4_get_exti_cfg( gpio_cfg_slot, &exti_cfg );
+        if( status != SMTC_HAL_MCU_STATUS_OK )
+        {
+            return status;
+        }
+
+        status = smtc_hal_mcu_gpio_stm32l4_get_trigger( input_cfg->irq_mode, &trigger );
+        if( status != SMTC_HAL_MCU_STATUS_OK )
+        {
+            return status;
+        }
+
+        gpio_cfg_slot->irq_cfg.input_cfg      = *input_cfg;
+        gpio_cfg_slot->irq_cfg.is_irq_enabled = false;
+        gpio_cfg_slot->irq_cfg.exti_cfg       = exti_cfg;
+
+        LL_EXTI_InitTypeDef EXTI_InitStruct = {
+            .Line_0_31   = gpio_cfg_slot->irq_cfg.exti_cfg.exti_line,
+            .Line_32_63  = LL_EXTI_LINE_NONE,
+            .LineCommand = ENABLE,
+            .Mode        = LL_EXTI_MODE_IT,
+            .Trigger     = trigger,
+        };
+
+        LL_EXTI_Init( &EXTI_InitStruct );
+
+        gpio_cfg_slot->is_irq_cfged = true;
+    }
+
+    gpio_cfg_slot->is_cfged = true;
+
+    *inst = gpio_cfg_slot;
+
+    return status;
 }
 
 /* --- EOF ------------------------------------------------------------------ */

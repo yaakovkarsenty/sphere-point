@@ -116,12 +116,6 @@ typedef struct smtc_hal_mcu_gpio_inst_s* smtc_hal_mcu_gpio_inst_t;
 
 smtc_hal_mcu_status_t smtc_hal_mcu_gpio_set_state( smtc_hal_mcu_gpio_inst_t inst, smtc_hal_mcu_gpio_state_t state )
 {
-//    if( smtc_hal_mcu_gpio_stm32l4_is_real_inst( inst ) == false )
-//    {
-//        return SMTC_HAL_MCU_STATUS_BAD_PARAMETERS;
-//    }
-
-//	printf("port %d , pin %d, state %d \r\n", inst->port, inst->pin, state);
     switch( state )
     {
     case SMTC_HAL_MCU_GPIO_STATE_HIGH:
@@ -145,28 +139,19 @@ smtc_hal_mcu_status_t smtc_hal_mcu_gpio_set_state( smtc_hal_mcu_gpio_inst_t inst
 
 smtc_hal_mcu_status_t smtc_hal_mcu_gpio_get_state( smtc_hal_mcu_gpio_inst_t inst, smtc_hal_mcu_gpio_state_t* state )
 {
-//    if( smtc_hal_mcu_gpio_stm32l4_is_real_inst( inst ) == false )
-//    {
-//        return SMTC_HAL_MCU_STATUS_BAD_PARAMETERS;
-//    }
-//
-//    const uint32_t pin_mode = LL_GPIO_GetPinMode( inst->port, inst->pin );
-//
-//    if( pin_mode == LL_GPIO_MODE_OUTPUT )
-//    {
-//        *state = ( LL_GPIO_IsOutputPinSet( inst->port, inst->pin ) == 1 ) ? SMTC_HAL_MCU_GPIO_STATE_HIGH
-//                                                                          : SMTC_HAL_MCU_GPIO_STATE_LOW;
-//    }
-//    else if( pin_mode == LL_GPIO_MODE_INPUT )
-//    {
-//        *state = ( LL_GPIO_IsInputPinSet( inst->port, inst->pin ) == 1 ) ? SMTC_HAL_MCU_GPIO_STATE_HIGH
-//                                                                         : SMTC_HAL_MCU_GPIO_STATE_LOW;
-//    }
-//    else
-//    {
-//        return SMTC_HAL_MCU_STATUS_NOT_INIT;
-//    }
-//
+
+	GPIO_PinState newState;
+	newState = HAL_GPIO_ReadPin(inst->port, inst->pin);
+
+	switch (newState)
+	{
+		case GPIO_PIN_SET:
+			*state = SMTC_HAL_MCU_GPIO_STATE_HIGH;
+			break;
+		case GPIO_PIN_RESET:
+			*state = SMTC_HAL_MCU_GPIO_STATE_LOW;
+			break;
+	}
     return SMTC_HAL_MCU_STATUS_OK;
 }
 

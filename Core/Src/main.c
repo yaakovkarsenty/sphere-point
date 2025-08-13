@@ -95,6 +95,7 @@ void display_string_printf( uint16_t x, uint16_t y, uint16_t color, const char* 
 
 	sprintf(log_buf, "%ld %s\r\n", HAL_GetTick(), buffer);
 	HAL_UART_Transmit(&huart2, (const uint8_t*) log_buf, strlen(log_buf) - 1, 1000);
+    printf("\r\n");
 #endif
 }
 

@@ -66,6 +66,7 @@ extern "C" {
  */
 #ifndef RANGING_DEVICE_MODE
 #define RANGING_DEVICE_MODE RANGING_DEVICE_MODE_MANAGER
+//#define RANGING_DEVICE_MODE RANGING_DEVICE_MODE_SUBORDINATE
 #endif
 
 int main_ranging_demo( void );
