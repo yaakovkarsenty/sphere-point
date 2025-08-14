@@ -1,0 +1,10 @@
+../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_spi.h:1006:26:LL_SPI_GetRxFIFOLevel	16	static
+../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_spi.h:1021:26:LL_SPI_GetTxFIFOLevel	16	static
+../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_spi.h:1348:25:LL_SPI_ReceiveData8	16	static
+../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_spi.h:1371:22:LL_SPI_TransmitData8	24	static
+../Drivers/LR11xx_driver/src/sp_lr11xx_hal.c:19:21:lr11xx_hal_write	24	static
+../Drivers/LR11xx_driver/src/sp_lr11xx_hal.c:57:21:lr11xx_hal_read	24	static
+../Drivers/LR11xx_driver/src/sp_lr11xx_hal.c:84:21:lr11xx_hal_reset	16	static
+../Drivers/LR11xx_driver/src/sp_lr11xx_hal.c:103:21:lr11xx_hal_wakeup	16	static
+../Drivers/LR11xx_driver/src/sp_lr11xx_hal.c:115:21:smtc_hal_mcu_spi_rw_buffer	32	static
+../Drivers/LR11xx_driver/src/sp_lr11xx_hal.c:167:21:lr11xx_hal_direct_read	24	static
