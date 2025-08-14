@@ -1,0 +1,221 @@
+16:43:46 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../ping_pong/main_ping_pong.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"ping_pong/main_ping_pong.d" -MT"ping_pong/main_ping_pong.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "ping_pong/main_ping_pong.o"
+arm-none-eabi-gcc -o "newTest.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Admin\work\newTest\newTest\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="newTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: newTest.elf
+ 
+arm-none-eabi-size  newTest.elf 
+arm-none-eabi-objdump -h -S newTest.elf  > "newTest.list"
+   text	   data	    bss	    dec	    hex	filename
+  50584	    148	   3004	  53736	   d1e8	newTest.elf
+Finished building: default.size.stdout
+ 
+Finished building: newTest.list
+ 
+16:44:17 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-size  newTest.elf 
+   text	   data	    bss	    dec	    hex	filename
+  50584	    148	   3004	  53736	   d1e8	newTest.elf
+Finished building: default.size.stdout
+ 
+16:46:06 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "newTest.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Admin\work\newTest\newTest\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="newTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: newTest.elf
+ 
+arm-none-eabi-size  newTest.elf 
+arm-none-eabi-objdump -h -S newTest.elf  > "newTest.list"
+   text	   data	    bss	    dec	    hex	filename
+  50896	    148	   3004	  54048	   d320	newTest.elf
+Finished building: default.size.stdout
+ 
+Finished building: newTest.list
+ 
+16:46:39 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-size  newTest.elf 
+   text	   data	    bss	    dec	    hex	filename
+  50896	    148	   3004	  54048	   d320	newTest.elf
+Finished building: default.size.stdout
+ 
+16:49:46 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../ping_pong/main_ping_pong.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"ping_pong/main_ping_pong.d" -MT"ping_pong/main_ping_pong.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "ping_pong/main_ping_pong.o"
+arm-none-eabi-gcc "../common/src/common_version.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"common/src/common_version.d" -MT"common/src/common_version.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "common/src/common_version.o"
+arm-none-eabi-gcc "../common/apps_common.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"common/apps_common.d" -MT"common/apps_common.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "common/apps_common.o"
+arm-none-eabi-gcc "../common/apps_version.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"common/apps_version.d" -MT"common/apps_version.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "common/apps_version.o"
+In file included from ../common/src/common_version.c:41:
+../common/src/common_version.c: In function 'common_version_print':
+C:/Users/Admin/work/newTest/newTest/common/inc/smtc_hal_dbg_trace.h:104:18: warning: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+  104 |     } while( 0 );printf("\r\n");
+      |                  ^~~~~~
+../common/src/common_version.c:77:5: note: in expansion of macro 'HAL_DBG_TRACE_INFO'
+   77 |     HAL_DBG_TRACE_INFO( "SDK version: %s\n", apps_modem_common_sdk_version );
+      |     ^~~~~~~~~~~~~~~~~~
+../common/src/common_version.c:42:1: note: include '<stdio.h>' or provide a declaration of 'printf'
+   41 | #include "smtc_hal_dbg_trace.h"
+  +++ |+#include <stdio.h>
+   42 | 
+C:/Users/Admin/work/newTest/newTest/common/inc/smtc_hal_dbg_trace.h:104:18: warning: incompatible implicit declaration of built-in function 'printf' [-Wbuiltin-declaration-mismatch]
+  104 |     } while( 0 );printf("\r\n");
+      |                  ^~~~~~
+../common/src/common_version.c:77:5: note: in expansion of macro 'HAL_DBG_TRACE_INFO'
+   77 |     HAL_DBG_TRACE_INFO( "SDK version: %s\n", apps_modem_common_sdk_version );
+      |     ^~~~~~~~~~~~~~~~~~
+C:/Users/Admin/work/newTest/newTest/common/inc/smtc_hal_dbg_trace.h:104:18: note: include '<stdio.h>' or provide a declaration of 'printf'
+  104 |     } while( 0 );printf("\r\n");
+      |                  ^~~~~~
+../common/src/common_version.c:77:5: note: in expansion of macro 'HAL_DBG_TRACE_INFO'
+   77 |     HAL_DBG_TRACE_INFO( "SDK version: %s\n", apps_modem_common_sdk_version );
+      |     ^~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "newTest.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Admin\work\newTest\newTest\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="newTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: newTest.elf
+ 
+arm-none-eabi-size  newTest.elf 
+arm-none-eabi-objdump -h -S newTest.elf  > "newTest.list"
+   text	   data	    bss	    dec	    hex	filename
+  51600	    148	   3004	  54752	   d5e0	newTest.elf
+Finished building: default.size.stdout
+ 
+Finished building: newTest.list
+ 
+16:51:18 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-size  newTest.elf 
+   text	   data	    bss	    dec	    hex	filename
+  51600	    148	   3004	  54752	   d5e0	newTest.elf
+Finished building: default.size.stdout
+ 
+16:52:12 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-size  newTest.elf 
+   text	   data	    bss	    dec	    hex	filename
+  51600	    148	   3004	  54752	   d5e0	newTest.elf
+Finished building: default.size.stdout
+ 
+16:53:08 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../ping_pong/main_ping_pong.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"ping_pong/main_ping_pong.d" -MT"ping_pong/main_ping_pong.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "ping_pong/main_ping_pong.o"
+arm-none-eabi-gcc -o "newTest.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Admin\work\newTest\newTest\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="newTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: newTest.elf
+ 
+arm-none-eabi-size  newTest.elf 
+arm-none-eabi-objdump -h -S newTest.elf  > "newTest.list"
+   text	   data	    bss	    dec	    hex	filename
+  51564	    148	   3004	  54716	   d5bc	newTest.elf
+Finished building: default.size.stdout
+ 
+Finished building: newTest.list
+ 
+16:54:24 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-size  newTest.elf 
+   text	   data	    bss	    dec	    hex	filename
+  51564	    148	   3004	  54716	   d5bc	newTest.elf
+Finished building: default.size.stdout
+ 
+16:57:15 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../common/src/smtc_hal_dbg_trace.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"common/src/smtc_hal_dbg_trace.d" -MT"common/src/smtc_hal_dbg_trace.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "common/src/smtc_hal_dbg_trace.o"
+../common/src/smtc_hal_dbg_trace.c: In function 'hal_mcu_trace_print':
+../common/src/smtc_hal_dbg_trace.c:82:19: error: expected ';' before '}' token
+   82 |     printf("/r/n")
+      |                   ^
+      |                   ;
+   83 | }
+      | ~                  
+make: *** [common/src/subdir.mk:34: common/src/smtc_hal_dbg_trace.o] Error 1
+"make -j22 all" terminated with exit code 2. Build might be incomplete.
+16:57:30 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../common/src/smtc_hal_dbg_trace.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"common/src/smtc_hal_dbg_trace.d" -MT"common/src/smtc_hal_dbg_trace.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "common/src/smtc_hal_dbg_trace.o"
+arm-none-eabi-gcc -o "newTest.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Admin\work\newTest\newTest\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="newTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: newTest.elf
+ 
+arm-none-eabi-size  newTest.elf 
+arm-none-eabi-objdump -h -S newTest.elf  > "newTest.list"
+   text	   data	    bss	    dec	    hex	filename
+  51624	    148	   3004	  54776	   d5f8	newTest.elf
+Finished building: default.size.stdout
+ 
+Finished building: newTest.list
+ 
+17:02:02 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../common/apps_common.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"common/apps_common.d" -MT"common/apps_common.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "common/apps_common.o"
+../common/apps_common.c: In function 'apps_common_lr11xx_radio_rttof_init':
+../common/apps_common.c:575:33: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  575 |         printf( "RTTof delay : %d\n", rttof_rx_tx_delay );
+      |                                ~^     ~~~~~~~~~~~~~~~~~
+      |                                 |     |
+      |                                 int   uint32_t {aka long unsigned int}
+      |                                %ld
+../common/apps_common.c: In function 'apps_common_lr11xx_irq_process':
+../common/apps_common.c:627:41: warning: format '%X' expects argument of type 'unsigned int', but argument 2 has type 'lr11xx_system_irq_mask_t' {aka 'long unsigned int'} [-Wformat=]
+  627 |         printf( "Interrupt flags = 0x%08X\n", irq_regs );
+      |                                      ~~~^     ~~~~~~~~
+      |                                         |     |
+      |                                         |     lr11xx_system_irq_mask_t {aka long unsigned int}
+      |                                         unsigned int
+      |                                      %08lX
+../common/apps_common.c:631:59: warning: format '%X' expects argument of type 'unsigned int', but argument 2 has type 'lr11xx_system_irq_mask_t' {aka 'long unsigned int'} [-Wformat=]
+  631 |         printf( "Interrupt flags (after filtering) = 0x%08X\n", irq_regs );
+      |                                                        ~~~^     ~~~~~~~~
+      |                                                           |     |
+      |                                                           |     lr11xx_system_irq_mask_t {aka long unsigned int}
+      |                                                           unsigned int
+      |                                                        %08lX
+arm-none-eabi-gcc -o "newTest.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Admin\work\newTest\newTest\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="newTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: newTest.elf
+ 
+arm-none-eabi-size  newTest.elf 
+arm-none-eabi-objdump -h -S newTest.elf  > "newTest.list"
+   text	   data	    bss	    dec	    hex	filename
+  49916	    148	   3004	  53068	   cf4c	newTest.elf
+Finished building: default.size.stdout
+ 
+Finished building: newTest.list
+ 
+17:04:59 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../ping_pong/main_ping_pong.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"ping_pong/main_ping_pong.d" -MT"ping_pong/main_ping_pong.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "ping_pong/main_ping_pong.o"
+arm-none-eabi-gcc "../common/src/common_version.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"common/src/common_version.d" -MT"common/src/common_version.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "common/src/common_version.o"
+../common/src/common_version.c: In function 'common_version_print':
+../common/src/common_version.c:77:5: warning: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+   77 |     printf( "SDK version: %s\n", apps_modem_common_sdk_version );
+      |     ^~~~~~
+../common/src/common_version.c:42:1: note: include '<stdio.h>' or provide a declaration of 'printf'
+   41 | #include "smtc_hal_dbg_trace.h"
+  +++ |+#include <stdio.h>
+   42 | 
+../common/src/common_version.c:77:5: warning: incompatible implicit declaration of built-in function 'printf' [-Wbuiltin-declaration-mismatch]
+   77 |     printf( "SDK version: %s\n", apps_modem_common_sdk_version );
+      |     ^~~~~~
+../common/src/common_version.c:77:5: note: include '<stdio.h>' or provide a declaration of 'printf'
+arm-none-eabi-gcc -o "newTest.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Admin\work\newTest\newTest\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="newTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: newTest.elf
+ 
+arm-none-eabi-size  newTest.elf 
+arm-none-eabi-objdump -h -S newTest.elf  > "newTest.list"
+   text	   data	    bss	    dec	    hex	filename
+  49784	    148	   3004	  52936	   cec8	newTest.elf
+Finished building: default.size.stdout
+ 
+Finished building: newTest.list
+ 
+17:06:27 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../ping_pong/main_ping_pong.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"ping_pong/main_ping_pong.d" -MT"ping_pong/main_ping_pong.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "ping_pong/main_ping_pong.o"
+arm-none-eabi-gcc -o "newTest.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Admin\work\newTest\newTest\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="newTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: newTest.elf
+ 
+arm-none-eabi-size  newTest.elf 
+arm-none-eabi-objdump -h -S newTest.elf  > "newTest.list"
+   text	   data	    bss	    dec	    hex	filename
+  49848	    148	   3004	  53000	   cf08	newTest.elf
+Finished building: default.size.stdout
+ 
+Finished building: newTest.list
+ 

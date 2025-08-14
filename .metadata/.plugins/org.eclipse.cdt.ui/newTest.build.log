@@ -1,0 +1,17 @@
+17:06:27 **** Incremental Build of configuration Debug for project newTest ****
+make -j22 all 
+arm-none-eabi-gcc "../ping_pong/main_ping_pong.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Admin/work/newTest/newTest/common" -I"C:/Users/Admin/work/newTest/newTest/common/printers" -I"C:/Users/Admin/work/newTest/newTest/lr11xx_driver/src" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-hal-mcu-stm32l4/third_party/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc" -I"C:/Users/Admin/work/newTest/newTest/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/common/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc-shields/lr11xx/inc" -I"C:/Users/Admin/work/newTest/newTest/libs/smtc_dbpsk_driver/src" -I"C:/Users/Admin/work/newTest/newTest/Drivers/STM32L4xx_HAL_Driver/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"ping_pong/main_ping_pong.d" -MT"ping_pong/main_ping_pong.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "ping_pong/main_ping_pong.o"
+arm-none-eabi-gcc -o "newTest.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Admin\work\newTest\newTest\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="newTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: newTest.elf
+ 
+arm-none-eabi-size  newTest.elf 
+arm-none-eabi-objdump -h -S newTest.elf  > "newTest.list"
+   text	   data	    bss	    dec	    hex	filename
+  49848	    148	   3004	  53000	   cf08	newTest.elf
+Finished building: default.size.stdout
+ 
+Finished building: newTest.list
+ 
+
+17:06:28 Build Finished. 0 errors, 0 warnings. (took 1s.2ms)
+

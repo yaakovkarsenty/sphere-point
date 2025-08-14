@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="hasShownOverlayPopupBefore" value="true"/>
+	<item key="replaceBarOpen" value="true"/>
+	<list key="searchhistory">
+		<item value="HAL_DBG_TRACE_INFO"/>
+		<item value="exti_ini"/>
+		<item value="gpio_init"/>
+	</list>
+	<list key="replacehistory">
+		<item value="printf"/>
+	</list>
+</section>

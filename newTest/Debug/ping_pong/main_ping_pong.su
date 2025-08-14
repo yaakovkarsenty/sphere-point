@@ -1,0 +1,7 @@
+../ping_pong/main_ping_pong.c:149:5:main_ping_pong	24	static
+../ping_pong/main_ping_pong.c:190:6:on_tx_done	32	static
+../ping_pong/main_ping_pong.c:204:6:on_rx_done	32	static
+../ping_pong/main_ping_pong.c:251:6:on_rx_timeout	8	static
+../ping_pong/main_ping_pong.c:262:6:on_rx_crc_error	8	static
+../ping_pong/main_ping_pong.c:267:6:on_fsk_len_error	8	static
+../ping_pong/main_ping_pong.c:272:13:ping_pong_reception_failure_handling	24	static

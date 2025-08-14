@@ -1,0 +1,1 @@
+../common/src/smtc_hal_arduino_mapping.c:90:31:smtc_hal_mcu_get_gpio_cfg	1

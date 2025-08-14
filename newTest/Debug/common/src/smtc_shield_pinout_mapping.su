@@ -1,0 +1,1 @@
+../common/src/smtc_shield_pinout_mapping.c:104:31:smtc_shield_pinout_mapping_get_gpio_cfg	16	static
