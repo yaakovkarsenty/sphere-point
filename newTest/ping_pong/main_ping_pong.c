@@ -152,10 +152,10 @@ int main_ping_pong( void )
     apps_common_shield_init( );
     uart_init();
 
-    printf( "===== LR11xx Ping-Pong example =====\n\n" );
+    printf( "===== LR11xx Ping-Pong example working =====\r\n" );
     apps_common_print_sdk_driver_version( );
 
-    context = apps_common_lr11xx_get_context( );
+    context = apps_common_lr11xx_get_context( ); // This setup all input and output according to shield
 
     apps_common_lr11xx_system_init( ( void* ) context );
     apps_common_lr11xx_fetch_and_print_version( ( void* ) context );
@@ -190,7 +190,7 @@ int main_ping_pong( void )
 void on_tx_done( void )
 {
     apps_common_lr11xx_handle_post_tx( );
-    HAL_DBG_TRACE_INFO( "Sent message %s, iteration %d\n", buffer_tx, iteration );
+    HAL_DBG_TRACE_INFO( "Sent message %s, iteration %d\r\n", buffer_tx, iteration );
 
     LL_mDelay( DELAY_PING_PONG_PACE_MS );
 

@@ -74,7 +74,7 @@ static const char* apps_modem_common_sdk_version = COMMON_SDK_VERSION;
 
 void common_version_print( void )
 {
-    printf( "SDK version: %s\n", apps_modem_common_sdk_version );
+    printf( "SDK version: %s \r\n", apps_modem_common_sdk_version );
 }
 
 /*

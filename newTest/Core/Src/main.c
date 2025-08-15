@@ -58,6 +58,8 @@ static void MX_USART2_UART_Init(void);
   #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #endif
 
+const char crLn[] = "\r\n";
+
 PUTCHAR_PROTOTYPE {
   HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);  // Replace huart2 with your UART handle
   return ch;

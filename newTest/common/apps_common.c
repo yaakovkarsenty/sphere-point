@@ -390,35 +390,35 @@ void apps_common_lr11xx_fetch_version( const lr11xx_hal_context_t* context, lr11
 
 void apps_common_lr11xx_print_version( const lr11xx_system_version_t* version )
 {
-    printf( "LR11xx information:\n" );
-    printf( "  - Firmware = 0x%04X\n", version->fw );
-    printf( "  - Hardware = 0x%02X\n", version->hw );
-    printf( "  - Type     = 0x%02X (0x01 for LR1110, 0x02 for LR1120, 0x03 for LR1121)\n", version->type );
+    printf( "LR11xx information:\r\n" );
+    printf( "  - Firmware = 0x%04X\r\n", version->fw );
+    printf( "  - Hardware = 0x%02X\r\n", version->hw );
+    printf( "  - Type     = 0x%02X (0x01 for LR1110, 0x02 for LR1120, 0x03 for LR1121)\r\n", version->type );
 
     if( ( version->type == LR11XX_SYSTEM_VERSION_TYPE_LR1110 ) && ( version->fw != LR1110_LATEST_FW_VERSION ) )
     {
-        HAL_DBG_TRACE_WARNING( "LR1110 is on version 0x%02x, but latest firmware version is 0x%02X\n", version->fw,
+        HAL_DBG_TRACE_WARNING( "LR1110 is on version 0x%02x, but latest firmware version is 0x%02X\r\n", version->fw,
                                LR1110_LATEST_FW_VERSION );
     }
     if( ( version->type == LR11XX_SYSTEM_VERSION_TYPE_LR1120 ) && ( version->fw != LR1120_LATEST_FW_VERSION ) )
     {
-        HAL_DBG_TRACE_WARNING( "LR1120 doesn't use latest firmware version which is 0x%02X\n",
+        HAL_DBG_TRACE_WARNING( "LR1120 doesn't use latest firmware version which is 0x%02X\r\n",
                                LR1120_LATEST_FW_VERSION );
     }
     if( ( version->type == LR11XX_SYSTEM_VERSION_TYPE_LR1121 ) && ( version->fw != LR1121_LATEST_FW_VERSION ) )
     {
-        HAL_DBG_TRACE_WARNING( "LR1121 doesn't use latest firmware version which is 0x%02X\n",
+        HAL_DBG_TRACE_WARNING( "LR1121 doesn't use latest firmware version which is 0x%02X\r\n",
                                LR1121_LATEST_FW_VERSION );
     }
 
-    HAL_DBG_TRACE_PRINTF( "\n" );
+    HAL_DBG_TRACE_PRINTF( "\r\n" );
 }
 
 void apps_common_print_sdk_driver_version( void )
 {
     common_version_print( );
     print_driver_version( );
-    printf( "\n" );
+    printf( "\r\n" );
 }
 
 void apps_common_lr11xx_radio_init( const void* context )
@@ -428,7 +428,7 @@ void apps_common_lr11xx_radio_init( const void* context )
 
     if( pa_pwr_cfg == NULL )
     {
-        HAL_DBG_TRACE_ERROR( "Invalid target frequency or power level\n" );
+        HAL_DBG_TRACE_ERROR( "Invalid target frequency or power level\r\n" );
         while( true )
         {
         }
@@ -495,16 +495,16 @@ void apps_common_lr11xx_radio_dbpsk_init( const void* context, const uint8_t pay
 
     if( pa_pwr_cfg == NULL )
     {
-        HAL_DBG_TRACE_ERROR( "Invalid target frequency or power level\n" );
+        HAL_DBG_TRACE_ERROR( "Invalid target frequency or power level\r\n" );
         while( true )
         {
         }
     }
 
-    printf( "Sigfox parameters:\n" );
-    printf( "   Packet type   = %s\n", lr11xx_radio_pkt_type_to_str( LR11XX_RADIO_PKT_TYPE_BPSK ) );
-    printf( "   RF frequency  = %u Hz\n", SIGFOX_UPLINK_RF_FREQ_IN_HZ );
-    printf( "   Output power  = %i dBm\n", SIGFOX_TX_OUTPUT_POWER_DBM );
+    printf( "Sigfox parameters:\r\n" );
+    printf( "   Packet type   = %s\r\n", lr11xx_radio_pkt_type_to_str( LR11XX_RADIO_PKT_TYPE_BPSK ) );
+    printf( "   RF frequency  = %u Hz\r\n", SIGFOX_UPLINK_RF_FREQ_IN_HZ );
+    printf( "   Output power  = %i dBm\r\n", SIGFOX_TX_OUTPUT_POWER_DBM );
 
     ASSERT_LR11XX_RC( lr11xx_radio_set_pkt_type( context, LR11XX_RADIO_PKT_TYPE_BPSK ) );
     ASSERT_LR11XX_RC( lr11xx_radio_set_rf_freq( context, SIGFOX_UPLINK_RF_FREQ_IN_HZ ) );
@@ -543,7 +543,7 @@ void apps_common_lr11xx_radio_rttof_init( const void* context )
 
     if( pa_pwr_cfg == NULL )
     {
-        HAL_DBG_TRACE_ERROR( "Invalid target frequency or power level\n" );
+        HAL_DBG_TRACE_ERROR( "Invalid target frequency or power level\r\n" );
         while( true )
         {
         }
@@ -572,11 +572,11 @@ void apps_common_lr11xx_radio_rttof_init( const void* context )
                                                                         lora_mod_params.sf, &rttof_rx_tx_delay ) )
     {
         ASSERT_LR11XX_RC( lr11xx_rttof_set_rx_tx_delay_indicator( context, rttof_rx_tx_delay ) );
-        printf( "RTTof delay : %d\n", rttof_rx_tx_delay );
+        printf( "RTTof delay : %d\r\n", rttof_rx_tx_delay );
     }
     else
     {
-        HAL_DBG_TRACE_ERROR( "Failed to get RTToF delay indicator\n" );
+        HAL_DBG_TRACE_ERROR( "Failed to get RTToF delay indicator\r\n" );
     }
 }
 
@@ -590,7 +590,7 @@ void apps_common_lr11xx_receive( const void* context, uint8_t* buffer, uint8_t b
     *size = rx_buffer_status.pld_len_in_bytes;
     if( *size > buffer_length )
     {
-        HAL_DBG_TRACE_ERROR( "Received payload (size: %d) is bigger than the buffer (size: %d)!\n", *size,
+        HAL_DBG_TRACE_ERROR( "Received payload (size: %d) is bigger than the buffer (size: %d)!\r\n", *size,
                              buffer_length );
         return;
     }
@@ -599,19 +599,19 @@ void apps_common_lr11xx_receive( const void* context, uint8_t* buffer, uint8_t b
 
     HAL_DBG_TRACE_ARRAY( "Packet content", buffer, *size );
 
-    printf( "Packet status:\n" );
+    printf( "Packet status:\r\n" );
     if( PACKET_TYPE == LR11XX_RADIO_PKT_TYPE_LORA )
     {
         lr11xx_radio_get_lora_pkt_status( context, &pkt_status_lora );
-        printf( "  - RSSI packet = %i dBm\n", pkt_status_lora.rssi_pkt_in_dbm );
-        printf( "  - Signal RSSI packet = %i dBm\n", pkt_status_lora.signal_rssi_pkt_in_dbm );
-        printf( "  - SNR packet = %i dB\n", pkt_status_lora.snr_pkt_in_db );
+        printf( "  - RSSI packet = %i dBm\r\n", pkt_status_lora.rssi_pkt_in_dbm );
+        printf( "  - Signal RSSI packet = %i dBm\r\n", pkt_status_lora.signal_rssi_pkt_in_dbm );
+        printf( "  - SNR packet = %i dB\r\n", pkt_status_lora.snr_pkt_in_db );
     }
     else if( PACKET_TYPE == LR11XX_RADIO_PKT_TYPE_GFSK )
     {
         lr11xx_radio_get_gfsk_pkt_status( context, &pkt_status_gfsk );
-        printf( "  - RSSI average = %i dBm\n", pkt_status_gfsk.rssi_avg_in_dbm );
-        printf( "  - RSSI sync = %i dBm\n", pkt_status_gfsk.rssi_sync_in_dbm );
+        printf( "  - RSSI average = %i dBm\r\n", pkt_status_gfsk.rssi_avg_in_dbm );
+        printf( "  - RSSI sync = %i dBm\r\n", pkt_status_gfsk.rssi_sync_in_dbm );
     }
 }
 
@@ -624,33 +624,33 @@ void apps_common_lr11xx_irq_process( const void* context, lr11xx_system_irq_mask
         lr11xx_system_irq_mask_t irq_regs;
         lr11xx_system_get_and_clear_irq_status( context, &irq_regs );
 
-        printf( "Interrupt flags = 0x%08X\n", irq_regs );
+        printf( "Interrupt flags = 0x%08X \r\r\n", irq_regs );
 
         irq_regs &= irq_filter_mask;
 
-        printf( "Interrupt flags (after filtering) = 0x%08X\n", irq_regs );
+        printf( "Interrupt flags (after filtering) = 0x%08X\r\r\n", irq_regs );
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_TX_DONE ) == LR11XX_SYSTEM_IRQ_TX_DONE )
         {
-            printf( "Tx done\n" );
-            on_tx_done( );
+            printf( "Tx done\r\r\n" );
+			on_tx_done( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_PREAMBLE_DETECTED ) == LR11XX_SYSTEM_IRQ_PREAMBLE_DETECTED )
         {
-        	printf( "Preamble detected\n" );
+        	printf( "Preamble detected\r\r\n" );
             on_preamble_detected( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_HEADER_ERROR ) == LR11XX_SYSTEM_IRQ_HEADER_ERROR )
         {
-        	printf( "Header error\n" );
+        	printf( "Header error\r\n" );
             on_header_error( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_SYNC_WORD_HEADER_VALID ) == LR11XX_SYSTEM_IRQ_SYNC_WORD_HEADER_VALID )
         {
-        	printf( "Syncword or header valid\n" );
+        	printf( "Syncword or header valid\r\r\n" );
             on_syncword_header_valid( );
         }
 
@@ -658,91 +658,91 @@ void apps_common_lr11xx_irq_process( const void* context, lr11xx_system_irq_mask
         {
             if( ( irq_regs & LR11XX_SYSTEM_IRQ_CRC_ERROR ) == LR11XX_SYSTEM_IRQ_CRC_ERROR )
             {
-            	printf( "CRC error\n" );
+            	printf( "CRC error\r\n" );
                 on_rx_crc_error( );
             }
             else if( ( irq_regs & LR11XX_SYSTEM_IRQ_FSK_LEN_ERROR ) == LR11XX_SYSTEM_IRQ_FSK_LEN_ERROR )
             {
-            	printf( "FSK length error\n" );
+            	printf( "FSK length error\r\n" );
                 on_fsk_len_error( );
             }
             else
             {
-            	printf( "Rx done\n" );
+            	printf( "Rx done\r\n" );
                 on_rx_done( );
             }
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_CAD_DONE ) == LR11XX_SYSTEM_IRQ_CAD_DONE )
         {
-            printf( "CAD done\n" );
+            printf( "CAD done\r\n" );
             if( ( irq_regs & LR11XX_SYSTEM_IRQ_CAD_DETECTED ) == LR11XX_SYSTEM_IRQ_CAD_DETECTED )
             {
-                printf( "Channel activity detected\n" );
+                printf( "Channel activity detected\r\n" );
                 on_cad_done_detected( );
             }
             else
             {
-                printf( "No channel activity detected\n" );
+                printf( "No channel activity detected\r\n" );
                 on_cad_done_undetected( );
             }
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_TIMEOUT ) == LR11XX_SYSTEM_IRQ_TIMEOUT )
         {
-            HAL_DBG_TRACE_WARNING( "Rx timeout\n" );
+            HAL_DBG_TRACE_WARNING( "Rx timeout\r\r\n" );
             on_rx_timeout( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_LORA_RX_TIMESTAMP ) == LR11XX_SYSTEM_IRQ_LORA_RX_TIMESTAMP )
         {
-            printf( "LoRa Rx timestamp\n" );
+            printf( "LoRa Rx timestamp\r\n" );
             on_lora_rx_timestamp( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_RTTOF_REQ_VALID ) == LR11XX_SYSTEM_IRQ_RTTOF_REQ_VALID )
         {
-            printf( "RTToF request valid\n" );
+            printf( "RTToF request valid\r\n" );
             on_rttof_request_valid( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_RTTOF_REQ_DISCARDED ) == LR11XX_SYSTEM_IRQ_RTTOF_REQ_DISCARDED )
         {
-            printf( "RTToF request discarded\n" );
+            printf( "RTToF request discarded\r\n" );
             on_rttof_request_discarded( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_RTTOF_RESP_DONE ) == LR11XX_SYSTEM_IRQ_RTTOF_RESP_DONE )
         {
-            printf( "RTToF response done\n" );
+            printf( "RTToF response done\r\n" );
             on_rttof_response_done( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_RTTOF_EXCH_VALID ) == LR11XX_SYSTEM_IRQ_RTTOF_EXCH_VALID )
         {
-            printf( "RTToF exchange valid\n" );
+            printf( "RTToF exchange valid\r\n" );
             on_rttof_exchange_valid( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_RTTOF_TIMEOUT ) == LR11XX_SYSTEM_IRQ_RTTOF_TIMEOUT )
         {
-            printf( "RTToF timeout\n" );
+            printf( "RTToF timeout\r\n" );
             on_rttof_timeout( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_WIFI_SCAN_DONE ) == LR11XX_SYSTEM_IRQ_WIFI_SCAN_DONE )
         {
-            printf( "Wi-Fi scan done\n" );
+            printf( "Wi-Fi scan done\r\n" );
             on_wifi_scan_done( );
         }
 
         if( ( irq_regs & LR11XX_SYSTEM_IRQ_GNSS_SCAN_DONE ) == LR11XX_SYSTEM_IRQ_GNSS_SCAN_DONE )
         {
-            printf( "GNSS scan done\n" );
+            printf( "GNSS scan done\r\n" );
             on_gnss_scan_done( );
         }
 
-        HAL_DBG_TRACE_PRINTF( "\n" );
+        HAL_DBG_TRACE_PRINTF( "\r\n" );
     }
 }
 
@@ -846,78 +846,78 @@ uint32_t get_time_on_air_in_ms( void )
 
 void print_common_configuration( void )
 {
-    printf( "Common parameters:\n" );
-    printf( "   Packet type   = %s\n", lr11xx_radio_pkt_type_to_str( PACKET_TYPE ) );
-    printf( "   RF frequency  = %u Hz\n", RF_FREQ_IN_HZ );
-    printf( "   Output power  = %i dBm\n", TX_OUTPUT_POWER_DBM );
-    printf( "   Fallback mode = %s\n", lr11xx_radio_fallback_modes_to_str( FALLBACK_MODE ) );
-    printf( ( ENABLE_RX_BOOST_MODE == true ) ? "   Rx boost activated\n" : "   Rx boost deactivated\n" );
-    HAL_DBG_TRACE_PRINTF( "\n" );
+    printf( "Common parameters:\r\n" );
+    printf( "   Packet type   = %s\r\n", lr11xx_radio_pkt_type_to_str( PACKET_TYPE ) );
+    printf( "   RF frequency  = %u Hz\r\n", RF_FREQ_IN_HZ );
+    printf( "   Output power  = %i dBm\r\n", TX_OUTPUT_POWER_DBM );
+    printf( "   Fallback mode = %s\r\n", lr11xx_radio_fallback_modes_to_str( FALLBACK_MODE ) );
+    printf( ( ENABLE_RX_BOOST_MODE == true ) ? "   Rx boost activated\r\n" : "   Rx boost deactivated\r\n" );
+    HAL_DBG_TRACE_PRINTF( "\r\n" );
 }
 
 void print_lora_configuration( void )
 {
-    printf( "LoRa modulation parameters:\n" );
-    printf( "   Spreading factor = %s\n", lr11xx_radio_lora_sf_to_str( LORA_SPREADING_FACTOR ) );
-    printf( "   Bandwidth        = %s\n", lr11xx_radio_lora_bw_to_str( LORA_BANDWIDTH ) );
-    printf( "   Coding rate      = %s\n", lr11xx_radio_lora_cr_to_str( LORA_CODING_RATE ) );
-    HAL_DBG_TRACE_PRINTF( "\n" );
+    printf( "LoRa modulation parameters:\r\n" );
+    printf( "   Spreading factor = %s\r\n", lr11xx_radio_lora_sf_to_str( LORA_SPREADING_FACTOR ) );
+    printf( "   Bandwidth        = %s\r\n", lr11xx_radio_lora_bw_to_str( LORA_BANDWIDTH ) );
+    printf( "   Coding rate      = %s\r\n", lr11xx_radio_lora_cr_to_str( LORA_CODING_RATE ) );
+    HAL_DBG_TRACE_PRINTF( "\r\n" );
 
-    printf( "LoRa packet parameters:\n" );
-    printf( "   Preamble length = %d symbol(s)\n", LORA_PREAMBLE_LENGTH );
-    printf( "   Header mode     = %s\n", lr11xx_radio_lora_pkt_len_modes_to_str( LORA_PKT_LEN_MODE ) );
-    printf( "   Payload length  = %d byte(s)\n", PAYLOAD_LENGTH );
-    printf( "   CRC mode        = %s\n", lr11xx_radio_lora_crc_to_str( LORA_CRC ) );
-    printf( "   IQ              = %s\n", lr11xx_radio_lora_iq_to_str( LORA_IQ ) );
-    HAL_DBG_TRACE_PRINTF( "\n" );
+    printf( "LoRa packet parameters:\r\n" );
+    printf( "   Preamble length = %d symbol(s)\r\n", LORA_PREAMBLE_LENGTH );
+    printf( "   Header mode     = %s\r\n", lr11xx_radio_lora_pkt_len_modes_to_str( LORA_PKT_LEN_MODE ) );
+    printf( "   Payload length  = %d byte(s)\r\n", PAYLOAD_LENGTH );
+    printf( "   CRC mode        = %s\r\n", lr11xx_radio_lora_crc_to_str( LORA_CRC ) );
+    printf( "   IQ              = %s\r\n", lr11xx_radio_lora_iq_to_str( LORA_IQ ) );
+    HAL_DBG_TRACE_PRINTF( "\r\n" );
 
-    printf( "LoRa syncword = 0x%02X\n", LORA_SYNCWORD );
-    HAL_DBG_TRACE_PRINTF( "\n" );
+    printf( "LoRa syncword = 0x%02X\r\n", LORA_SYNCWORD );
+    HAL_DBG_TRACE_PRINTF( "\r\n" );
 }
 
 void print_gfsk_configuration( void )
 {
-    printf( "GFSK modulation parameters:\n" );
-    printf( "   Bitrate             = %u bps\n", FSK_BITRATE );
-    printf( "   Pulse shape         = %s\n", lr11xx_radio_gfsk_pulse_shape_to_str( FSK_PULSE_SHAPE ) );
-    printf( "   Bandwidth           = %s\n", lr11xx_radio_gfsk_bw_to_str( FSK_BANDWIDTH ) );
-    printf( "   Frequency deviation = %u Hz\n", FSK_FDEV );
-    HAL_DBG_TRACE_PRINTF( "\n" );
+    printf( "GFSK modulation parameters:\r\n" );
+    printf( "   Bitrate             = %u bps\r\n", FSK_BITRATE );
+    printf( "   Pulse shape         = %s\r\n", lr11xx_radio_gfsk_pulse_shape_to_str( FSK_PULSE_SHAPE ) );
+    printf( "   Bandwidth           = %s\r\n", lr11xx_radio_gfsk_bw_to_str( FSK_BANDWIDTH ) );
+    printf( "   Frequency deviation = %u Hz\r\n", FSK_FDEV );
+    HAL_DBG_TRACE_PRINTF( "\r\n" );
 
-    printf( "GFSK packet parameters:\n" );
-    printf( "   Preamble length   = %d bit(s)\n", FSK_PREAMBLE_LENGTH );
-    printf( "   Preamble detector = %s\n",
+    printf( "GFSK packet parameters:\r\n" );
+    printf( "   Preamble length   = %d bit(s)\r\n", FSK_PREAMBLE_LENGTH );
+    printf( "   Preamble detector = %s\r\n",
                         lr11xx_radio_gfsk_preamble_detector_to_str( FSK_PREAMBLE_DETECTOR ) );
-    printf( "   Syncword length   = %d bit(s)\n", FSK_SYNCWORD_LENGTH );
-    printf( "   Address filtering = %s\n",
+    printf( "   Syncword length   = %d bit(s)\r\n", FSK_SYNCWORD_LENGTH );
+    printf( "   Address filtering = %s\r\n",
                         lr11xx_radio_gfsk_address_filtering_to_str( FSK_ADDRESS_FILTERING ) );
     if( FSK_ADDRESS_FILTERING != LR11XX_RADIO_GFSK_ADDRESS_FILTERING_DISABLE )
     {
-        printf( "     (Node address      = 0x%02X)\n", FSK_NODE_ADDRESS );
+        printf( "     (Node address      = 0x%02X)\r\n", FSK_NODE_ADDRESS );
         if( FSK_ADDRESS_FILTERING == LR11XX_RADIO_GFSK_ADDRESS_FILTERING_NODE_AND_BROADCAST_ADDRESSES )
         {
-            printf( "     (Broadcast address = 0x%02X)\n", FSK_BROADCAST_ADDRESS );
+            printf( "     (Broadcast address = 0x%02X)\r\n", FSK_BROADCAST_ADDRESS );
         }
     }
-    printf( "   Header mode       = %s\n", lr11xx_radio_gfsk_pkt_len_modes_to_str( FSK_HEADER_TYPE ) );
-    printf( "   Payload length    = %d byte(s)\n", PAYLOAD_LENGTH );
-    printf( "   CRC mode          = %s\n", lr11xx_radio_gfsk_crc_type_to_str( FSK_CRC_TYPE ) );
+    printf( "   Header mode       = %s\r\n", lr11xx_radio_gfsk_pkt_len_modes_to_str( FSK_HEADER_TYPE ) );
+    printf( "   Payload length    = %d byte(s)\r\n", PAYLOAD_LENGTH );
+    printf( "   CRC mode          = %s\r\n", lr11xx_radio_gfsk_crc_type_to_str( FSK_CRC_TYPE ) );
     if( FSK_CRC_TYPE != LR11XX_RADIO_GFSK_CRC_OFF )
     {
-        printf( "     (CRC seed       = 0x%08X)\n", FSK_CRC_SEED );
-        printf( "     (CRC polynomial = 0x%08X)\n", FSK_CRC_POLYNOMIAL );
+        printf( "     (CRC seed       = 0x%08X)\r\n", FSK_CRC_SEED );
+        printf( "     (CRC polynomial = 0x%08X)\r\n", FSK_CRC_POLYNOMIAL );
     }
-    printf( "   DC free           = %s\n", lr11xx_radio_gfsk_dc_free_to_str( FSK_DC_FREE ) );
+    printf( "   DC free           = %s\r\n", lr11xx_radio_gfsk_dc_free_to_str( FSK_DC_FREE ) );
     if( FSK_DC_FREE != LR11XX_RADIO_GFSK_DC_FREE_OFF )
     {
-        printf( "     (Whitening seed = 0x%04X)\n", FSK_WHITENING_SEED );
+        printf( "     (Whitening seed = 0x%04X)\r\n", FSK_WHITENING_SEED );
     }
-    HAL_DBG_TRACE_PRINTF( "\n" );
+    HAL_DBG_TRACE_PRINTF( "\r\n" );
 }
 
 void print_driver_version( void )
 {
-    printf( "LR11XX driver version: %s\n", lr11xx_driver_version_get_version_string( ) );
+    printf( "LR11XX driver version: %s\r\n", lr11xx_driver_version_get_version_string( ) );
 }
 
 void radio_on_dio_irq( void* context )
@@ -926,75 +926,75 @@ void radio_on_dio_irq( void* context )
 }
 void on_tx_done( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_rx_done( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_rx_timeout( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_preamble_detected( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_syncword_header_valid( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_header_error( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_fsk_len_error( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_rx_crc_error( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_cad_done_undetected( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_cad_done_detected( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_lora_rx_timestamp( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_wifi_scan_done( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_gnss_scan_done( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_rttof_request_valid( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_rttof_request_discarded( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_rttof_response_done( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_rttof_exchange_valid( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 void on_rttof_timeout( void )
 {
-    printf( "No IRQ routine defined\n" );
+    printf( "No IRQ routine defined\r\n" );
 }
 
 /* --- EOF ------------------------------------------------------------------ */

@@ -77,7 +77,9 @@ extern "C" {
 
 #if( HAL_DBG_TRACE ) && !defined( PERF_TEST_ENABLED )
 
-#define HAL_DBG_TRACE_PRINTF( ... ) hal_mcu_trace_print( __VA_ARGS__ )
+#define HAL_DBG_TRACE_PRINTF printf
+
+#define HAL_DBG_TRACE_PRINTF1( ... ) hal_mcu_trace_print( __VA_ARGS__ )
 
 #define HAL_DBG_TRACE_MSG( msg )                             \
     do                                                       \
@@ -94,7 +96,9 @@ extern "C" {
         HAL_DBG_TRACE_PRINTF( HAL_DBG_TRACE_COLOR_DEFAULT ); \
     } while( 0 );
 
-#define HAL_DBG_TRACE_INFO( ... )                            \
+#define HAL_DBG_TRACE_INFO     printf
+
+#define HAL_DBG_TRACE_INFO1( ... )                            \
     do                                                       \
     {                                                        \
         HAL_DBG_TRACE_PRINTF( HAL_DBG_TRACE_COLOR_GREEN );   \
@@ -104,7 +108,9 @@ extern "C" {
     } while( 0 );printf("\r\n");
 
 
-#define HAL_DBG_TRACE_WARNING( ... )                         \
+#define HAL_DBG_TRACE_WARNING printf
+
+#define HAL_DBG_TRACE_WARNING1( ... )                         \
     do                                                       \
     {                                                        \
         HAL_DBG_TRACE_PRINTF( HAL_DBG_TRACE_COLOR_YELLOW );  \
@@ -113,7 +119,9 @@ extern "C" {
         HAL_DBG_TRACE_PRINTF( HAL_DBG_TRACE_COLOR_DEFAULT ); \
     } while( 0 );
 
-#define HAL_DBG_TRACE_ERROR( ... )                           \
+#define HAL_DBG_TRACE_ERROR printf
+
+#define HAL_DBG_TRACE_ERROR1( ... )                           \
     do                                                       \
     {                                                        \
         HAL_DBG_TRACE_PRINTF( HAL_DBG_TRACE_COLOR_RED );     \
