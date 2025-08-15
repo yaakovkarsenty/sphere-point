@@ -283,3 +283,4 @@ static void ping_pong_reception_failure_handling( void )
     apps_common_lr11xx_handle_pre_tx( );
     ASSERT_LR11XX_RC( lr11xx_radio_set_tx( context, 0 ) );
 }
+// Test comment

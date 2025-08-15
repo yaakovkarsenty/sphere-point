@@ -81,6 +81,8 @@ extern "C" {
 
 #define HAL_DBG_TRACE_PRINTF1( ... ) hal_mcu_trace_print( __VA_ARGS__ )
 
+#define HAL_DBG_TRACE_MSG   printf
+
 #define HAL_DBG_TRACE_MSG( msg )                             \
     do                                                       \
     {                                                        \
